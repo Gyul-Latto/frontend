@@ -4,7 +4,7 @@
   <header class="header">
     <div class="header-left">
       <div class="logo"></div>
-      <span class="brand">latto</span>
+      <span class="brand"><router-link to="/">latto</router-link></span>
     </div>
 
     <nav class="header-nav">

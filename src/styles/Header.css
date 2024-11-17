@@ -78,3 +78,13 @@
   margin: 0 0.5rem;
   color: #dcdcdc;
 }
+.header-left .brand a {
+  text-decoration: none;
+  color: var(--color-four); 
+  font-weight: bold;
+}
+
+.header-left .brand a:hover {
+  text-decoration: none;
+  color: var(--color-four);
+}
