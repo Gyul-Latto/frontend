@@ -12,8 +12,7 @@ const routes = [
   { path: '/similar', name: 'similar', component: SimilarApartment },
   { path: '/popular', name: 'popular', component: PopularApartment },
   { path: '/map', name: 'map', component: MapView },
-  { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFoundComponent }
-
+  { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFoundComponent },
 ];
 
 const router = createRouter({

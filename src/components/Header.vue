@@ -1,3 +1,5 @@
+<script setup></script>
+
 <template>
   <header class="header">
     <div class="header-left">
@@ -19,8 +21,5 @@
     </div>
   </header>
 </template>
-
-<script setup>
-</script>
 
 <style src="@/styles/Header.css"></style>

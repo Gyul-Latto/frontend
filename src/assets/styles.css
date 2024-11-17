@@ -1,13 +1,12 @@
 :root {
-    --color-four: #884A39;
-    --color-three: #C38154;
-    --color-two: #FFC26F;
-    --color-one: #F9E0BB; 
-    --font-family-base: 'Pretendard';
-  }
-  
-  body {
-    font-family: var(--font-family-base);
-    margin: 0;
-  }
-  
+  --color-four: #884a39;
+  --color-three: #c38154;
+  --color-two: #ffc26f;
+  --color-one: #f9e0bb;
+  --font-family-base: 'Pretendard';
+}
+
+body {
+  font-family: var(--font-family-base);
+  margin: 0;
+}

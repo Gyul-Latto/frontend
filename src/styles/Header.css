@@ -1,80 +1,80 @@
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-    border-bottom: 0.5px solid gray;
-  }
-  
-  /* 왼쪽 로고 */
-  .header-left {
-    display: flex;
-    align-items: center;
-  }
-  
-  .logo {
-    width: 30px;
-    height: 30px;
-    background-color: var(--color-two);
-    border-radius: 50%;
-    margin-right: 0.5rem;
-  }
-  
-  .brand {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: var(--color-four);
-  }
-  
-  /* 오른쪽  */
-  .header-nav {
-    margin-left: auto;
-  }
-  
-  .header-nav ul {
-    list-style: none;
-    display: flex;
-    gap: 2rem; 
-    margin: 0;
-    padding: 0;
-  }
-  
-  .header-nav li:last-child {
-    margin-right: 2rem; 
-  }
-  
-  .header-nav a {
-    text-decoration: none;
-    font-size: 1rem;
-    color: black;
-  }
-  
-  .header-nav a:hover {
-    text-decoration: underline;
-  }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  border-bottom: 0.5px solid gray;
+}
 
-  .header-right {
-    margin-left: 2.5rem; 
-  }
-  
-  .auth-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.5rem 1rem;
-    border: 1px solid #dcdcdc;
-    border-radius: 3px; /* 모서리 */
-    background-color: #fff;
-    font-size: 1rem;
-    color: #333; /* 글자색 */
-    text-decoration: none;
-  }
-  
-  .auth-button:hover {
-    background-color: #f9f9f9; 
-  }
-  
-  .auth-button .divider {
-    margin: 0 0.5rem; 
-    color: #dcdcdc;
-  }
+/* 왼쪽 로고 */
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  width: 30px;
+  height: 30px;
+  background-color: var(--color-two);
+  border-radius: 50%;
+  margin-right: 0.5rem;
+}
+
+.brand {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--color-four);
+}
+
+/* 오른쪽  */
+.header-nav {
+  margin-left: auto;
+}
+
+.header-nav ul {
+  list-style: none;
+  display: flex;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+}
+
+.header-nav li:last-child {
+  margin-right: 2rem;
+}
+
+.header-nav a {
+  text-decoration: none;
+  font-size: 1rem;
+  color: black;
+}
+
+.header-nav a:hover {
+  text-decoration: underline;
+}
+
+.header-right {
+  margin-left: 2.5rem;
+}
+
+.auth-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border: 1px solid #dcdcdc;
+  border-radius: 3px; /* 모서리 */
+  background-color: #fff;
+  font-size: 1rem;
+  color: #333; /* 글자색 */
+  text-decoration: none;
+}
+
+.auth-button:hover {
+  background-color: #f9f9f9;
+}
+
+.auth-button .divider {
+  margin: 0 0.5rem;
+  color: #dcdcdc;
+}
