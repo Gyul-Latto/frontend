@@ -1,0 +1,26 @@
+<template>
+  <header class="header">
+    <div class="header-left">
+      <div class="logo"></div>
+      <span class="brand">latto</span>
+    </div>
+
+    <nav class="header-nav">
+      <ul>
+        <li><router-link to="/recommended">추천 아파트</router-link></li>
+        <li><router-link to="/similar">다른 사람들 집</router-link></li>
+        <li><router-link to="/popular">실시간 인기 아파트</router-link></li>
+        <li><router-link to="/map">지도</router-link></li>
+      </ul>
+    </nav>
+
+    <div class="header-right">
+      <a href="#" class="auth-button">로그인 <span class="divider">|</span> 회원가입</a>
+    </div>
+  </header>
+</template>
+
+<script setup>
+</script>
+
+<style src="@/styles/Header.css"></style>
