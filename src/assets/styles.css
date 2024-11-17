@@ -5,8 +5,10 @@
   --color-one: #f9e0bb;
   --font-family-base: 'Pretendard';
 }
+* {
+  font-family: var(--font-family-base);
+}
 
 body {
-  font-family: var(--font-family-base);
   margin: 0;
 }
