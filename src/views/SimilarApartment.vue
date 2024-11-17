@@ -1,15 +1,12 @@
 <template>
     <div>
-      <h1>여기가 메인 페이지</h1>
+      <h1>다른 사람 아파트</h1>
     </div>
   </template>
   
   <script>
   export default {
-    name: 'HomeView',
+    name: 'SimilarApartment',
   };
   </script>
-  
-  <style scoped>
-  </style>
   

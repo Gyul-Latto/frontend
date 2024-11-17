@@ -1,12 +1,13 @@
+
 <template>
     <div>
-      <h1>여기가 메인 페이지</h1>
+      <h1>지도</h1>
     </div>
   </template>
   
   <script>
   export default {
-    name: 'HomeView',
+    name: 'MapView',
   };
   </script>
   
