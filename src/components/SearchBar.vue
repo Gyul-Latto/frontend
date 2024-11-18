@@ -6,6 +6,8 @@ const sido = ref("");
 const gugun = ref("");
 const dong = ref("");
 
+const amenity = ref("");
+
 // 초기화
 onMounted(() => {
   fetchSido();
@@ -44,6 +46,23 @@ const handleSearch = () => {
       <button @click="handleSearch">검색</button>
     </div>
   </div>
+
+  <div class="filter-bar">
+    <div class="filter-row">
+      <select id="station" v-model="amenity">
+        <option value="">역 거리 선택</option>
+        </select>
+        <select id="station" v-model="amenity">
+        <option value="">편의점 거리 선택</option>
+        </select>
+        <select id="station" v-model="amenity">
+        <option value="">경찰서 거리 선택</option>
+        </select>
+    </div>
+  </div>
+
+
+
 </template>
 
 <style src="@/styles/SearchBar.css"></style>
