@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { initializeMap } from "@/utils/mapUtils";
-import SearchBar from "@/components/SearchBar.vue";
+import SearchBar from "@/components/MapSearchBar.vue";
 
 const map = ref(null);
 
