@@ -89,4 +89,4 @@ const handleSearch = () => {
 
 
 
-<style src="@/styles/SearchBar.css"></style>
+<style src="@/styles/MapSearchBar.css"></style>
