@@ -1,92 +1,113 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import { fetchSido, fetchRegionData } from "@/utils/searchUtils";
+import { fetchSido, fetchRegionData, fetchApartments } from "@/utils/searchUtils";
 
 const sido = ref("");
 const gugun = ref("");
 const dong = ref("");
-const amenities = ref([]);
-const selectedAmenities = ref({
-  station: "",
-  convenienceStore: "",
-  policeStation: "",
+const apartments = ref([]);
+const sidoOptions = ref([]);
+const gugunOptions = ref([]);
+const dongOptions = ref([]);
+
+// 시도 데이터 초기화
+onMounted(async () => {
+  try {
+    const regions = await fetchSido();
+    sidoOptions.value = regions; // [{ code: "1100000000", name: "서울특별시" }, ...]
+  } catch (error) {
+    console.error("Failed to fetch sido data:", error);
+  }
 });
 
-// 초기화
-onMounted(() => {
-  fetchSido();
-  fetchAmenities();
-});
-
-// 시도 변경 시 구군 불러오기
-const handleSidoChange = (event) => {
-  const regcode = event.target.value.substr(0, 2) + "*00000";
-  fetchRegionData(regcode, "gugun");
+// 시도 변경 시 구군 데이터 가져오기
+const handleSidoChange = async () => {
+  if (!sido.value) {
+    gugunOptions.value = [];
+    dongOptions.value = [];
+    return;
+  }
+  try {
+    const regcode = sido.value.substr(0, 2) + "*00000"; // 시도 코드
+    const regions = await fetchRegionData(regcode, "gugun");
+    gugunOptions.value = regions; // [{ code: "1111000000", name: "종로구" }, ...]
+  } catch (error) {
+    console.error("Failed to fetch gugun data:", error);
+  }
 };
 
-// 구군 변경 시 동 불러오기
-const handleGugunChange = (event) => {
-  const regcode = event.target.value.substr(0, 5) + "*";
-  fetchRegionData(regcode, "dong");
+// 구군 변경 시 동 데이터 가져오기
+const handleGugunChange = async () => {
+  if (!gugun.value) {
+    dongOptions.value = [];
+    return;
+  }
+  try {
+    const regcode = gugun.value.substr(0, 5) + "*"; // 구군 코드
+    const regions = await fetchRegionData(regcode, "dong");
+    dongOptions.value = regions; // [{ code: "...", name: "..." }, ...]
+  } catch (error) {
+    console.error("Failed to fetch dong data:", error);
+  }
 };
 
-// 어메니티 필터 값
-const fetchAmenities = () => {
-  amenities.value = [
-    { id: "station", name: "역 거리", options: ["10분", "20분"] },
-    { id: "convenienceStore", name: "편의점 거리", options: ["10분", "20분"] },
-    { id: "policeStation", name: "경찰서 거리", options: ["10분", "20분"] },
-  ];
-};
+// 검색 실행
+const handleSearch = async () => {
+  try {
+    const sidoName = sidoOptions.value.find(option => option.code === sido.value)?.name || "";
+    const gugunName = gugunOptions.value.find(option => option.code === gugun.value)?.name || "";
+    const dongName = dongOptions.value.find(option => option.code === dong.value)?.name || "";
 
-// 검색 버튼 클릭 시
-const handleSearch = () => {
-  console.log("검색:", {
-    sido: sido.value,
-    gugun: gugun.value,
-    dong: dong.value,
-    amenities: selectedAmenities.value,
-  });
+    apartments.value = await fetchApartments(sidoName, gugunName, dongName);
+  } catch (error) {
+    console.error("Failed to fetch apartments:", error);
+  }
 };
 </script>
 
 <template>
   <div class="search-bar">
-    <!-- 검색 영역 -->
+    <!-- 검색 폼 -->
     <div class="search-row">
-      <select id="sido" v-model="sido" @change="handleSidoChange">
+      <select v-model="sido" @change="handleSidoChange">
         <option value="">시도 선택</option>
+        <option v-for="option in sidoOptions" :key="option.code" :value="option.code">
+          {{ option.name }}
+        </option>
       </select>
-      <select id="gugun" v-model="gugun" @change="handleGugunChange">
-        <option value="">구 선택</option>
+
+      <select v-model="gugun" @change="handleGugunChange" :disabled="!sido">
+        <option value="">구군 선택</option>
+        <option v-for="option in gugunOptions" :key="option.code" :value="option.code">
+          {{ option.name }}
+        </option>
       </select>
-      <select id="dong" v-model="dong">
+
+      <select v-model="dong" :disabled="!gugun">
         <option value="">동 선택</option>
+        <option v-for="option in dongOptions" :key="option.code" :value="option.code">
+          {{ option.name }}
+        </option>
       </select>
-      <button @click="handleSearch">검색</button>
+
+      <button @click="handleSearch" :disabled="!dong">검색</button>
     </div>
 
-    <!-- 필터 바 -->
-    <div class="filter-row">
-      <select v-model="selectedAmenities.station">
-        <option value="">역 거리</option>
-        <option value="10분">10분</option>
-        <option value="20분">20분</option>
-      </select>
-      <select v-model="selectedAmenities.convenienceStore">
-        <option value="">편의점 거리</option>
-        <option value="10분">10분</option>
-        <option value="20분">20분</option>
-      </select>
-      <select v-model="selectedAmenities.policeStation">
-        <option value="">경찰서 거리</option>
-        <option value="10분">10분</option>
-        <option value="20분">20분</option>
-      </select>
+    <!-- 검색 결과 -->
+    <div class="search-results" v-if="apartments.length > 0">
+      <h3>아파트 검색 결과</h3>
+      <ul>
+        <li v-for="apartment in apartments" :key="apartment.aptSeq">
+          <strong>{{ apartment.aptNm }}</strong>
+          <p>주소: {{ apartment.roadNm }} {{ apartment.roadNmBonbun }}</p>
+          <p>건축년도: {{ apartment.buildYear }}</p>
+        </li>
+      </ul>
+    </div>
+    <div v-else>
+      <p>검색 결과가 없습니다.</p>
     </div>
   </div>
 </template>
-
-
 
 <style src="@/styles/MapSearchBar.css"></style>

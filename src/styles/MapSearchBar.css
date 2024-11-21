@@ -8,8 +8,7 @@
 }
 
 /* 검색 영역 */
-.search-row,
-.filter-row {
+.search-row{
   display: flex;
   flex-wrap: nowrap;
   gap: 0.5rem;
@@ -17,8 +16,7 @@
   justify-content: space-between;
 }
 
-.search-row select,
-.filter-row select {
+.search-row select{
   flex: 1;
   min-width: 90px;
   padding: 0.5rem;
@@ -50,4 +48,8 @@
 
 .search-row button:active {
   background-color: var(--color-two);
+}
+
+.search-results {
+  margin-top: 20px;
 }
