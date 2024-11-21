@@ -33,4 +33,11 @@ const handleSearchResults = (results) => {
   flex: 3;
   position: relative;
 }
+
+::v-deep(.kakao-info-window) {
+  display: block !important;
+  visibility: visible !important;
+  z-index: 1000 !important;
+  opacity: 1 !important;
+}
 </style>
