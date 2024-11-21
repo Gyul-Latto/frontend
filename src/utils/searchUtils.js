@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const fetchApartments = async (sido, gugun, dong) => {
-  //console.log({ sido, gugun, dong });
+  console.log({ sido, gugun, dong });
 
   const response = await axios.post("http://localhost:8080/api/apt/search", {
     sidoName: sido,
