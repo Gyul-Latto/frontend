@@ -2,6 +2,8 @@
 import { ref, onMounted } from "vue";
 import { fetchSido, fetchRegionData, fetchApartments } from "@/utils/searchUtils";
 
+const emit = defineEmits(["search"]);
+
 const sido = ref("");
 const gugun = ref("");
 const dong = ref("");
@@ -30,7 +32,7 @@ const handleSidoChange = async () => {
   try {
     const regcode = sido.value.substr(0, 2) + "*00000"; // 시도 코드
     const regions = await fetchRegionData(regcode, "gugun");
-    gugunOptions.value = regions; // [{ code: "1111000000", name: "종로구" }, ...]
+    gugunOptions.value = regions;
   } catch (error) {
     console.error("Failed to fetch gugun data:", error);
   }
@@ -45,7 +47,7 @@ const handleGugunChange = async () => {
   try {
     const regcode = gugun.value.substr(0, 5) + "*"; // 구군 코드
     const regions = await fetchRegionData(regcode, "dong");
-    dongOptions.value = regions; // [{ code: "...", name: "..." }, ...]
+    dongOptions.value = regions;
   } catch (error) {
     console.error("Failed to fetch dong data:", error);
   }
@@ -54,13 +56,17 @@ const handleGugunChange = async () => {
 // 검색 실행
 const handleSearch = async () => {
   try {
-    const sidoName = sidoOptions.value.find(option => option.code === sido.value)?.name || "";
-    const gugunName = gugunOptions.value.find(option => option.code === gugun.value)?.name || "";
-    const dongName = dongOptions.value.find(option => option.code === dong.value)?.name || "";
+    const sidoName = sidoOptions.value.find(option => option.code === sido.value)?.name || '';
+    const gugunName = gugunOptions.value.find(option => option.code === gugun.value)?.name || '';
+    const dongName = dongOptions.value.find(option => option.code === dong.value)?.name || '';
 
     apartments.value = await fetchApartments(sidoName, gugunName, dongName);
+
+    // 검색 결과를 부모로 전달
+    emit("search", apartments.value);
+    
   } catch (error) {
-    console.error("Failed to fetch apartments:", error);
+    console.error("Failed to fetch apartments data:", error);
   }
 };
 </script>

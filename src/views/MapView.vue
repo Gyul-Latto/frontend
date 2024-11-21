@@ -1,43 +1,43 @@
 <script setup>
-import { ref, onMounted } from "vue";
-import { initializeMap } from "@/utils/mapUtils";
-import SearchBar from "@/components/MapSearchBar.vue";
+import { ref } from "vue";
+import MapSearchBar from "@/components/MapSearchBar.vue";
+import MapContainer from "@/components/MapContainer.vue";
 
-const map = ref(null);
+const apartments = ref([]);
 
-// 지도 초기화
-onMounted(() => {
-  map.value = initializeMap("map");
-});
+// 검색 결과를 업데이트
+const handleSearchResults = (results) => {
+  console.log("검색 결과:", results);
+  apartments.value = results;
+};
 </script>
 
 <template>
   <div class="map-view">
-    <!-- 왼쪽 검색 바 -->
-    <div id="search-container">
-      <SearchBar />
+    <div class="search-bar-container">
+      <MapSearchBar @search="handleSearchResults" />
     </div>
-
-    <!-- 오른쪽 지도 -->
-    <div id="map-container">
-      <div id="map"></div>
+    <div class="map-container">
+      <MapContainer :apartments="apartments" />
     </div>
   </div>
 </template>
 
 <style scoped>
 .map-view {
-  display: flex; 
-  height: 100vh; 
+  display: flex;
+  height: 100vh; /* 전체 화면 사용 */
 }
 
-#map-container {
-  flex: 1; 
+.map-container {
+  flex: 3;
   position: relative;
 }
 
-#map {
-  width: 100%;
-  height: 100%; 
+::v-deep(.kakao-info-window) {
+  display: block !important;
+  visibility: visible !important;
+  z-index: 1000 !important;
+  opacity: 1 !important;
 }
 </style>
