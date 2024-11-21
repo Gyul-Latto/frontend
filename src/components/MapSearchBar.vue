@@ -1,7 +1,8 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { fetchSido, fetchRegionData, fetchApartments } from "@/utils/searchUtils";
-import { initializeMap, addMarkers } from "@/utils/mapUtils";
+
+const emit = defineEmits(["search"]);
 
 const sido = ref("");
 const gugun = ref("");
@@ -10,25 +11,14 @@ const apartments = ref([]);
 const sidoOptions = ref([]);
 const gugunOptions = ref([]);
 const dongOptions = ref([]);
-const map = ref(null);
-
-// 지도 초기화
-onMounted(() => {
-  map.value = initializeMap("map");
-  if (!map.value) {
-    console.error("지도 객체 초기화 실패");
-  } else {
-    console.log("지도 초기화 완료:", map.value);
-  }
-});
 
 // 시도 데이터 초기화
 onMounted(async () => {
   try {
     const regions = await fetchSido();
-    sidoOptions.value = regions;
+    sidoOptions.value = regions; // [{ code: "1100000000", name: "서울특별시" }, ...]
   } catch (error) {
-    console.error("시도 데이터를 가져오는 중 오류 발생:", error);
+    console.error("Failed to fetch sido data:", error);
   }
 });
 
@@ -40,11 +30,11 @@ const handleSidoChange = async () => {
     return;
   }
   try {
-    const regcode = sido.value.substr(0, 2) + "*00000";
+    const regcode = sido.value.substr(0, 2) + "*00000"; // 시도 코드
     const regions = await fetchRegionData(regcode, "gugun");
     gugunOptions.value = regions;
   } catch (error) {
-    console.error("구군 데이터를 가져오는 중 오류 발생:", error);
+    console.error("Failed to fetch gugun data:", error);
   }
 };
 
@@ -55,42 +45,35 @@ const handleGugunChange = async () => {
     return;
   }
   try {
-    const regcode = gugun.value.substr(0, 5) + "*";
+    const regcode = gugun.value.substr(0, 5) + "*"; // 구군 코드
     const regions = await fetchRegionData(regcode, "dong");
     dongOptions.value = regions;
   } catch (error) {
-    console.error("동 데이터를 가져오는 중 오류 발생:", error);
+    console.error("Failed to fetch dong data:", error);
   }
 };
 
 // 검색 실행
 const handleSearch = async () => {
   try {
-    const sidoName = sidoOptions.value.find((option) => option.code === sido.value)?.name || "";
-    const gugunName = gugunOptions.value.find((option) => option.code === gugun.value)?.name || "";
-    const dongName = dongOptions.value.find((option) => option.code === dong.value)?.name || "";
+    const sidoName = sidoOptions.value.find(option => option.code === sido.value)?.name || '';
+    const gugunName = gugunOptions.value.find(option => option.code === gugun.value)?.name || '';
+    const dongName = dongOptions.value.find(option => option.code === dong.value)?.name || '';
 
     apartments.value = await fetchApartments(sidoName, gugunName, dongName);
 
-    if (!map.value) {
-      console.error("지도 객체가 초기화되지 않았습니다.");
-      return;
-    }
-
-    if (apartments.value.length > 0) {
-      console.log("검색된 아파트 데이터:", apartments.value);
-      addMarkers(map.value, apartments.value); // 마커 추가
-    } else {
-      console.warn("아파트 데이터가 없습니다.");
-    }
+    // 검색 결과를 부모로 전달
+    emit("search", apartments.value);
+    
   } catch (error) {
-    console.error("아파트 데이터를 가져오는 중 오류 발생:", error);
+    console.error("Failed to fetch apartments data:", error);
   }
 };
 </script>
 
 <template>
   <div class="search-bar">
+    <!-- 검색 폼 -->
     <div class="search-row">
       <select v-model="sido" @change="handleSidoChange">
         <option value="">시도 선택</option>
@@ -116,6 +99,7 @@ const handleSearch = async () => {
       <button @click="handleSearch" :disabled="!dong">검색</button>
     </div>
 
+    <!-- 검색 결과 -->
     <div class="search-results" v-if="apartments.length > 0">
       <h3>아파트 검색 결과</h3>
       <ul>
@@ -131,13 +115,5 @@ const handleSearch = async () => {
     </div>
   </div>
 </template>
-
-
-<style scoped>
-.search-results {
-  margin-top: 20px;
-}
-</style>
-
 
 <style src="@/styles/MapSearchBar.css"></style>

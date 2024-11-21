@@ -1,8 +1,14 @@
 export function initializeMap(mapId) {
   const mapContainer = document.getElementById(mapId);
+  
+  if (!mapContainer) {
+    console.error(`Element with ID '${mapId}' not found.`);
+    return null;
+  }
+
   const mapOption = {
     center: new kakao.maps.LatLng(37.5665, 126.978), // 초기 위치: 서울
-    level: 3,
+    level: 3, // 확대 수준
   };
 
   console.log("지도 초기화 옵션:", mapOption); // 디버깅용
@@ -13,7 +19,9 @@ let markers = []; // 마커 배열
 let infoWindows = []; // 인포윈도우 배열
 
 export function addMarkers(map, apartments) {
-  // 기존 마커와 인포윈도우 제거
+  
+  console.log("addMarkers 호출:", { map, apartments });
+
   markers.forEach((marker) => marker.setMap(null));
   infoWindows.forEach((infoWindow) => infoWindow.close());
   markers = []; // 마커 배열 초기화
@@ -25,7 +33,7 @@ export function addMarkers(map, apartments) {
   const imageOption = { offset: new kakao.maps.Point(27, 69) };
 
   apartments.forEach(({ latitude, longitude, aptNm }, index) => {
-    // console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+    console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
     if (!latitude || !longitude) return;
 
     const position = new kakao.maps.LatLng(parseFloat(latitude), parseFloat(longitude));
@@ -66,4 +74,3 @@ export function addMarkers(map, apartments) {
 
   console.log(`${markers.length}개의 마커와 ${infoWindows.length}개의 인포윈도우가 추가되었습니다.`);
 }
-

@@ -1,24 +1,24 @@
 <script setup>
-import { ref, onMounted } from "vue";
-import { initializeMap } from "@/utils/mapUtils";
-import SearchBar from "@/components/MapSearchBar.vue";
+import { ref } from "vue";
+import MapSearchBar from "@/components/MapSearchBar.vue";
+import MapContainer from "@/components/MapContainer.vue";
 
-// const map = ref(null);
-onMounted(() => {
-  // const mapElementId = "map";
-  // map.value = initializeMap(mapElementId);
-  // console.log("지도 초기화 완료:", map.value);
-});
+const apartments = ref([]);
 
+// 검색 결과를 업데이트
+const handleSearchResults = (results) => {
+  console.log("검색 결과:", results);
+  apartments.value = results;
+};
 </script>
 
 <template>
   <div class="map-view">
-    <div id="search-container">
-      <SearchBar />
+    <div class="search-bar-container">
+      <MapSearchBar @search="handleSearchResults" />
     </div>
-    <div id="map-container">
-      <div id="map"></div>
+    <div class="map-container">
+      <MapContainer :apartments="apartments" />
     </div>
   </div>
 </template>
@@ -26,22 +26,11 @@ onMounted(() => {
 <style scoped>
 .map-view {
   display: flex;
-  height: auto;
-  height: 100vh;
+  height: 100vh; /* 전체 화면 사용 */
 }
 
-#map-container {
-  flex: 1;
-  /* position: relative;
-  width: auto;
-  min-height: 100vh;
-  height: auto; */
-  height: calc(100vh - 60px);
-}
-
-#map {
-  width: 100%;
-  height: 100%;
+.map-container {
+  flex: 3;
+  position: relative;
 }
 </style>
-
