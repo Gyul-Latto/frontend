@@ -15,6 +15,7 @@ const loadRecommendations = async () => {
       }
     });
     if (response.data.statusCode === 200) {
+      console.log(response.data.data)
       apartments.value = response.data.data; // API의 data를 apartments에 저장
     } else {
       console.error('Failed to fetch recommendations:', response.data.message);
@@ -37,9 +38,8 @@ onMounted(loadRecommendations);
         v-for="apartment in apartments" 
         :key="apartment.aptSeq" 
         class="house-card">
-        <p><strong>{{ apartment.aptNm }}</strong></p>
-        <p>{{ apartment.roadNm }} {{ apartment.roadNmBonbun }}</p>
-        <p>건축 연도: {{ apartment.buildYear }}</p>
+        <p>{{ apartment.umdNm }} <strong>{{ apartment.aptNm }}</strong></p>
+          <p>{{ apartment.description }}</p>
       </div>
     </div>
   </section>

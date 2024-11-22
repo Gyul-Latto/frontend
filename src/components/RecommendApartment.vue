@@ -15,7 +15,8 @@ const fetchRecommendations = async () => {
       },
     });
     if (response.data.statusCode === 200) {
-      recommendations.value = response.data.data; // 백엔드 응답의 data를 상태로 저장
+      console.log(response.data.data)
+      recommendations.value = response.data.data;
     } else {
       console.error('Failed to fetch recommendations:', response.data.message);
     }
@@ -37,11 +38,10 @@ onMounted(fetchRecommendations);
         :key="index" 
         class="recommend-item"
       >
-        <img :src="getApartmentImage(apartment.aptSeq)" alt="아파트" />
+        <img :src="apartment.aptImg" alt="아파트" />
         <div class="recommend-info">
-          <p><strong>{{ apartment.aptNm }}</strong></p>
-          <p>{{ apartment.roadNm }} {{ apartment.roadNmBonbun }}</p>
-          <p>건축 연도: {{ apartment.buildYear }}</p>
+          <p>{{ apartment.umdNm }} <strong>{{ apartment.aptNm }}</strong></p>
+          <p>{{ apartment.description }}</p>
         </div>
       </div>
     </div>
