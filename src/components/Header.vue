@@ -17,7 +17,10 @@
     </nav>
 
     <div class="header-right">
-      <a href="#" class="auth-button">로그인 <span class="divider">|</span> 회원가입</a>
+      <!-- <a href="#" class="auth-button">로그인 <span class="divider">|</span> 회원가입</a> -->
+      <div class="auth-button">
+        <router-link to="/login">로그인 <span class="divider">|</span> 회원가입</router-link>
+      </div>
     </div>
   </header>
 </template>

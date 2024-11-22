@@ -5,6 +5,7 @@ import SimilarApartment from '@/views/SimilarApartment.vue';
 import PopularApartment from '@/views/PopularApartment.vue';
 import MapView from '@/views/MapView.vue';
 import NotFoundComponent from '@/views/NotFoundComponent.vue';
+import LoginView from '@/views/LoginView.vue';
 
 const routes = [
   { path: '/', name: 'home', component: HomeView }, // 메인 페이지
@@ -12,6 +13,7 @@ const routes = [
   { path: '/recommended', name: 'recommended', component: RecommendedApartment },
   { path: '/similar', name: 'similar', component: SimilarApartment },
   { path: '/popular', name: 'popular', component: PopularApartment },
+  { path: '/login', name: 'login', component: LoginView },
   { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFoundComponent },
 ];
 

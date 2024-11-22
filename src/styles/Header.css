@@ -71,7 +71,12 @@
   color: #333; /* 글자색 */
   text-decoration: none;
 }
-
+.auth-button a {
+  text-decoration: none;
+}
+.auth-button a:visited {
+  color: inherit; /* 방문 후 색상 유지 */
+}
 .auth-button:hover {
   background-color: #f9f9f9;
 }
@@ -82,7 +87,7 @@
 }
 .header-left .brand a {
   text-decoration: none;
-  color: var(--color-four); 
+  color: var(--color-four);
   font-weight: bold;
 }
 
