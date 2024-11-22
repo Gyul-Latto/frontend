@@ -15,8 +15,8 @@ const fetchRecommendations = async () => {
       },
     });
     if (response.data.statusCode === 200) {
-      console.log(response.data.data)
-      recommendations.value = response.data.data;
+      recommendations.value = response.data.data.reverse().slice(0, 4);
+      console.log(recommendations.value);
     } else {
       console.error('Failed to fetch recommendations:', response.data.message);
     }
@@ -32,6 +32,7 @@ onMounted(fetchRecommendations);
 <template>
   <section class="recommend-section">
     <h3>문인규님의 추천 아파트</h3>
+    <p class="section-description">문인규이 좋아요 한 아파트를 분석하여 추천드립니다.</p>
     <div class="recommend-list">
       <div 
         v-for="(apartment, index) in recommendations" 
@@ -40,21 +41,13 @@ onMounted(fetchRecommendations);
       >
         <img :src="apartment.aptImg" alt="아파트" />
         <div class="recommend-info">
-          <p>{{ apartment.umdNm }} <strong>{{ apartment.aptNm }}</strong></p>
-          <p>{{ apartment.description }}</p>
+          <p class="apt-name">{{ apartment.umdNm }} <span class="apt-dong">- {{ apartment.aptNm }}</span></p>
+          <p class="apt-details">{{ apartment.description }}</p>
         </div>
       </div>
     </div>
   </section>
 </template>
-
-<script>
-// 이미지 경로 가져오기
-function getApartmentImage(aptSeq) {
-  // aptSeq에 따라 동적 이미지를 반환하거나 기본 이미지를 반환
-  return `/assets/images/${aptSeq}.jpeg` || '@/assets/images/sampleApartment.jpeg';
-}
-</script>
 
 <style scoped>
 .recommend-section {
@@ -65,31 +58,48 @@ function getApartmentImage(aptSeq) {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
-  justify-content: space-between; 
+  justify-content: space-between;
 }
 
 .recommend-item {
   flex: 1 1 calc(25% - 1rem);
-  max-width: calc(25% - 1rem); 
-  background-color: #f0f0f0; 
-  border-radius: 10px; 
-  overflow: hidden; 
+  max-width: calc(25% - 1rem);
+  background-color: #ffffff;
+  border: 2px solid #ddd; /* 테두리 추가 */
+  border-radius: 10px;
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s; /* 클릭 가능 효과 */
+  cursor: pointer; /* 클릭 가능 커서 */
+}
+
+.recommend-item:hover {
+  transform: translateY(-5px); /* 호버 시 상승 효과 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 호버 시 그림자 */
 }
 
 .recommend-item img {
   width: 100%;
   aspect-ratio: 1 / 1;
-  object-fit: cover; 
+  object-fit: cover;
   display: block;
 }
 
 .recommend-info {
   padding: 1rem;
-  text-align: center;
-  background-color: #ffffff;
+  text-align: center; /* 중앙 정렬 */
 }
 
-.recommend-info p {
-  margin: 0.5rem 0;
+.apt-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #333; 
+}
+
+.apt-details {
+  font-size: 0.9rem;
+  color: #555; /* 내용 색상 */
+  margin-top: 1rem; /* 간격 추가 */
+  text-align: center; /* 내용 중앙 정렬 */
 }
 </style>

@@ -15,8 +15,8 @@ const loadRecommendations = async () => {
       }
     });
     if (response.data.statusCode === 200) {
-      console.log(response.data.data)
-      apartments.value = response.data.data; // API의 data를 apartments에 저장
+      apartments.value = response.data.data.reverse().slice(0, 2);
+      console.log(apartments.value);
     } else {
       console.error('Failed to fetch recommendations:', response.data.message);
     }
@@ -32,40 +32,68 @@ onMounted(loadRecommendations);
 <template>
   <section class="other-houses-section">
     <h3>이런 집은 어때요?</h3>
-    <p>문인규님과 비슷한 성향을 가진 사람들이 선택한 집을 추천드립니다.</p>
+    <p class="section-description">문인규님과 비슷한 성향을 가진 사람들이 선택한 집을 추천드립니다.</p>
     <div class="other-houses-list">
       <div 
         v-for="apartment in apartments" 
         :key="apartment.aptSeq" 
         class="house-card">
-        <p>{{ apartment.umdNm }} <strong>{{ apartment.aptNm }}</strong></p>
-          <p>{{ apartment.description }}</p>
+        <img :src="apartment.aptImg" alt="아파트 이미지" class="house-image" />
+        <div class="house-info">
+          <p class="house-title">{{ apartment.umdNm }} - <strong>{{ apartment.aptNm }}</strong></p>
+          <p class="house-description">{{ apartment.description }}</p>
+        </div>
       </div>
     </div>
   </section>
 </template>
 
 <style scoped>
-.other-houses-section {
-  margin-bottom: 2rem;
-}
-
 .other-houses-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 5rem; /* 간격을 적당히 유지 */
+  justify-content: space-between; /* 가로 정렬 */
 }
 
 .house-card {
-  flex: 1;
-  padding: 2rem;
+  flex: 1 1 calc(20% - 1rem); /* 컨테이너 너비를 줄임 */
   background-color: var(--color-one);
   border-radius: 10px;
-  text-align: center;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  padding: 1.5rem; /* 컨테이너 높이 줄임 */
 }
 
-.house-card p {
-  margin: 0.5rem 0;
+.house-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
 }
+
+.house-image {
+  width: 100%; /* 사진 너비를 유지 */
+  height: 350px; /* 사진 높이를 줄임 */
+  object-fit: cover;
+  margin: 0 auto 0.1rem auto;
+  border-radius: 8px;
+}
+
+.house-info {
+  padding: 0.3rem 0 0 0;
+}
+
+.house-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.house-description {
+  font-size: 0.9rem;
+  color: #666;
+}
+
 </style>
