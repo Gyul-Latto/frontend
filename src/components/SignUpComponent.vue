@@ -1,5 +1,32 @@
 <script setup>
-import MapSearchBar from './MapSearchBar.vue';
+import locationBarComponent from './locationBarComponent.vue';
+import { ref } from 'vue';
+
+const selectedDong = ref('');
+const selectedGender = ref('');
+
+const handleDongChanged = (code) => {
+  selectedDong.value = code;
+};
+const selectGender = (gender) => {
+  selectedGender.value = gender;
+};
+
+const email = ref('');
+const password = ref('');
+const passwordCheck = ref('');
+const name = ref('');
+const birthday = ref('');
+
+const handleSubmit = () => {
+  console.log('Email:', email.value);
+  console.log('Password:', password.value);
+  console.log('Password Check:', passwordCheck.value);
+  console.log('Name:', name.value);
+  console.log('Birthday:', birthday.value);
+  console.log('Dong:', selectedDong.value);
+  console.log('Gender:', selectedGender.value);
+};
 </script>
 
 <template>
@@ -9,39 +36,74 @@ import MapSearchBar from './MapSearchBar.vue';
         <div class="logo"></div>
         <div class="brand">latto</div>
       </div>
-      <form>
+      <form @submit.prevent="handleSubmit">
         <div id="sign-up-box">
           <div class="input-box">
-            <input class="placeholder-image-for-user" id="id" placeholder="이메일" type="text" />
             <input
+              v-model="email"
+              class="placeholder-image-for-user"
+              id="id"
+              placeholder="이메일"
+              type="text"
+              required
+            />
+            <input
+              v-model="password"
               class="placeholder-image-for-password"
               id="pw"
               placeholder="비밀번호"
               type="password"
+              required
             />
             <input
+              v-model="passwordCheck"
               class="placeholder-image-for-password"
               id="pw-check"
               placeholder="비밀번호 확인"
               type="password"
+              required
             />
           </div>
           <div class="input-box">
-            <input class="placeholder-image-for-user" id="name" placeholder="이름" type="text" />
             <input
+              v-model="name"
+              class="placeholder-image-for-user"
+              id="name"
+              placeholder="이름"
+              type="text"
+              required
+            />
+            <input
+              v-model="birthday"
               class="placeholder-image-for-calendar"
               id="birthday"
               placeholder="생년월일"
               type="text"
               @focus="(e) => (e.target.type = 'date')"
               @blur="(e) => (e.target.type = 'text')"
+              required
             />
           </div>
 
-          <div class="input-box">
-            
-            <MapSearchBar />
-            <!-- <input id="gender" placeholder="성별" type="text" /> -->
+          <div class="location-bar">
+            <locationBarComponent @dong-changed="handleDongChanged" />
+            <!-- <input type="hidden" :value="selectedDong" /> -->
+            <div class="gender-boxes">
+              <div
+                class="gender-box gender-box-left"
+                :class="{ selected: selectedGender === '남' }"
+                @click="selectGender('남')"
+              >
+                남자
+              </div>
+              <div
+                class="gender-box gender-box-right"
+                :class="{ selected: selectedGender === '여' }"
+                @click="selectGender('여')"
+              >
+                여자
+              </div>
+            </div>
           </div>
           <button id="sign-up-btn" type="submit">회원가입</button>
         </div>
@@ -117,6 +179,7 @@ import MapSearchBar from './MapSearchBar.vue';
   border-radius: 10px;
   font-size: 20px;
   font-weight: 500;
+  cursor: pointer;
 }
 .divider {
   color: var(--color-four);
@@ -143,5 +206,37 @@ input:focus {
   background: url('../assets/images/icons/calendar.png') no-repeat;
   background-position: 10px center;
   padding-left: 45px;
+}
+.location-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  border: solid 1px #c4c7ca;
+  border-radius: 10px;
+}
+.gender-boxes {
+  display: flex;
+  justify-content: space-between;
+  /* width: 100%; */
+  padding: 0 20px;
+}
+.gender-box {
+  flex: 1;
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+.gender-box.selected {
+  background-color: var(--color-three);
+  color: white;
+  border-color: var(--color-three);
+}
+.gender-box-left {
+  border-radius: 10px 0 0 10px;
+}
+.gender-box-right {
+  border-radius: 0 10px 10px 0;
 }
 </style>
