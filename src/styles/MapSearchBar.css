@@ -9,6 +9,8 @@
   border-radius: 8px;
 }
 
+
+
 /* 검색 영역 */
 .search-row {
   display: flex;
@@ -44,30 +46,30 @@
   transition: background-color 0.2s ease-in-out;
 }
 
-.search-row button:hover {
-  background-color: var(--color-two);
-}
-
+.search-row button:hover,
 .search-row button:active {
   background-color: var(--color-two);
 }
 
-/* 검색 결과 */
 .search-results {
-  margin-top: 20px;
-  max-height: 800px; /* 스크롤 높이 제한 */
-  overflow-y: auto; /* 스크롤 가능하게 */
-  padding: 10px;
+  margin-top: 10px;
+  max-height: 800px;
+  overflow-y: auto;
+  padding: 5px 10px;
   border: 1px solid var(--color-boarder);
   border-radius: 8px;
   background-color: #f9f9f9;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-width: 800px; /* 검색창과 동일한 최대 너비 설정 */
+  margin: 0 auto; /* 중앙 정렬 */
 }
 
 .search-results h3 {
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   font-size: 1.2rem;
   color: #333;
+  line-height: 1.5;
+  padding-top: 0;
 }
 
 .search-results ul {
@@ -102,4 +104,53 @@
   font-size: 0.9rem;
   color: #666;
   margin: 0;
+}
+
+.apartment-card {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid var(--color-boarder);
+  border-radius: 8px;
+  background-color: white;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.apartment-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+}
+
+.apartment-img {
+  flex: 0 0 100px;
+  height: 100px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.apartment-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.apartment-title {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.apartment-location,
+.apartment-details {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.apartment-description {
+  margin-top: 5px;
+  font-size: 0.8rem;
+  color: #999;
 }

@@ -103,10 +103,21 @@ const handleSearch = async () => {
     <div class="search-results" v-if="apartments.length > 0">
       <h3>아파트 검색 결과</h3>
       <ul>
-        <li v-for="apartment in apartments" :key="apartment.aptSeq">
-          <strong>{{ apartment.aptNm }}</strong>
-          <p>주소: {{ apartment.roadNm }} {{ apartment.roadNmBonbun }}</p>
-          <p>건축년도: {{ apartment.buildYear }}</p>
+        <li
+            v-for="apartment in apartments"
+            :key="apartment.aptSeq"
+            class="apartment-card"
+            @click="$emit('select-apartment', apartment)"
+          >
+            <img :src="apartment.aptImg" alt="아파트 이미지" class="apartment-img" />
+            <div class="apartment-info">
+              <strong class="apartment-title">{{ apartment.aptNm }}</strong>
+              <p class="apartment-location">{{ apartment.umdNm }}</p>
+              <p class="apartment-details">
+                <span>{{ apartment.excluUseAr }}m²</span> | <span>{{ apartment.floor }}층</span>
+              </p>
+              <p class="apartment-description">{{ apartment.description }}</p>
+            </div>
         </li>
       </ul>
     </div>
@@ -114,6 +125,7 @@ const handleSearch = async () => {
       <p>검색 결과가 없습니다.</p>
     </div>
   </div>
+  
 </template>
 
 <style src="@/styles/MapSearchBar.css"></style>
