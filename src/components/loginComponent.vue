@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue';
-import uncheckedImage from '../assets/images/uncheckedImage.png';
-import checkedImage from '../assets/images/checkedImage.png';
+import uncheckedImage from '../assets/images/icons/uncheckedImage.png';
+import checkedImage from '../assets/images/icons/checkedImage.png';
 
 const isChecked = ref(false);
 
@@ -26,7 +26,11 @@ function toggleCheckbox() {
             </div>
 
             <div class="checkbox-container">
-              <img @click="toggleCheckbox" style="margin-right: 10px" :src="isChecked ? checkedImage : uncheckedImage" />
+              <img
+                @click="toggleCheckbox"
+                style="margin-right: 10px"
+                :src="isChecked ? checkedImage : uncheckedImage"
+              />
               <span @click="toggleCheckbox">로그인 상태 유지</span>
             </div>
 
@@ -37,7 +41,7 @@ function toggleCheckbox() {
       <div class="find-box">
         아이디 찾기<span class="divider">|</span>비밀번호 찾기
         <span class="divider">|</span>
-        <router-link> 회원가입</router-link>
+        <router-link class="sign-up-router" to="/sign-up"> 회원가입</router-link>
       </div>
     </div>
   </div>
@@ -52,13 +56,12 @@ function toggleCheckbox() {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 80vh;
   flex-direction: column;
 }
 #form-box {
   display: flex;
   flex-direction: column;
-
   border: 1px solid black; /* Example border */
   padding: 10px;
   border-radius: 10px;
@@ -121,5 +124,9 @@ input {
 }
 input:focus {
   outline: none;
+}
+.sign-up-router {
+  text-decoration: none;
+  color: inherit;
 }
 </style>

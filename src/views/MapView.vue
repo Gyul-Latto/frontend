@@ -1,13 +1,13 @@
 <script setup>
-import { ref } from "vue";
-import MapSearchBar from "@/components/MapSearchBar.vue";
-import MapContainer from "@/components/MapContainer.vue";
+import { ref } from 'vue';
+import MapSearchBar from '@/components/MapSearchBar.vue';
+import MapContainer from '@/components/MapContainer.vue';
 
 const apartments = ref([]);
 
 // 검색 결과를 업데이트
 const handleSearchResults = (results) => {
-  console.log("검색 결과:", results);
+  console.log('검색 결과:', results);
   apartments.value = results;
 };
 </script>

@@ -1,6 +1,6 @@
 export function initializeMap(mapId) {
   const mapContainer = document.getElementById(mapId);
-  
+
   if (!mapContainer) {
     console.error(`Element with ID '${mapId}' not found.`);
     return null;
@@ -11,7 +11,7 @@ export function initializeMap(mapId) {
     level: 3, // 확대 수준
   };
 
-  console.log("지도 초기화 옵션:", mapOption); // 디버깅용
+  console.log('지도 초기화 옵션:', mapOption); // 디버깅용
   return new kakao.maps.Map(mapContainer, mapOption);
 }
 
@@ -19,7 +19,7 @@ let markers = []; // 마커 배열
 let infoWindows = []; // 인포윈도우 배열
 
 export function addMarkers(map, apartments) {
-  console.log("addMarkers 호출:", { map, apartments });
+  console.log('addMarkers 호출:', { map, apartments });
 
   // 기존 마커와 인포윈도우 제거
   markers.forEach(({ marker, infoWindow }) => {
@@ -30,7 +30,7 @@ export function addMarkers(map, apartments) {
   infoWindows = []; // 인포윈도우 배열 초기화
 
   const bounds = new kakao.maps.LatLngBounds();
-  const imgURL = "https://cdn-icons-png.flaticon.com/512/3771/3771140.png";
+  const imgURL = 'https://cdn-icons-png.flaticon.com/512/3771/3771140.png';
   const imgSize = new kakao.maps.Size(64, 69);
   const imageOption = { offset: new kakao.maps.Point(27, 69) };
 
@@ -62,7 +62,7 @@ export function addMarkers(map, apartments) {
     });
 
     // 마커 클릭 이벤트 처리
-    kakao.maps.event.addListener(marker, "click", () => {
+    kakao.maps.event.addListener(marker, 'click', () => {
       if (infoWindow.getMap()) {
         console.log(`InfoWindow 닫기: ${aptNm}`);
         infoWindow.close();
@@ -70,7 +70,6 @@ export function addMarkers(map, apartments) {
         console.log(`InfoWindow 열기: ${aptNm}`);
         infoWindows.forEach((win) => win.close()); // 기존 인포윈도우 닫기
         infoWindow.open(map, marker); // 현재 마커에 연결된 인포윈도우 열기
-      
       }
     });
 
@@ -84,6 +83,6 @@ export function addMarkers(map, apartments) {
     map.setBounds(bounds);
     console.log(`${markers.length}개의 마커가 추가되었습니다.`);
   } else {
-    console.warn("표시할 유효한 마커가 없습니다.");
+    console.warn('표시할 유효한 마커가 없습니다.');
   }
 }
