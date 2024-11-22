@@ -15,14 +15,14 @@ const handleSearchResults = (results) => {
 
 // 아파트 선택
 const handleSelectApartment = (apartment) => {
+  console.log("선택된 아파트:", apartment);
   selectedApartment.value = apartment;
 };
 
 // 상세보기 닫기
 const handleCloseDetail = () => {
   selectedApartment.value = null;
-}
-
+};
 </script>
 
 <template>
@@ -43,20 +43,21 @@ const handleCloseDetail = () => {
     </div>
     <!-- 지도 -->
     <div class="map-container">
-      <MapContainer :apartments="apartments" 
+      <MapContainer
+        :apartments="apartments"
+        @select-apartment="handleSelectApartment"
       />
     </div>
   </div>
 </template>
 
 <style scoped>
-
 .search-bar-container {
-  flex: 1; 
+  flex: 1;
   display: flex;
   justify-content: center;
-  max-width: 800px; 
-  margin: 0 auto; 
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .map-view {
