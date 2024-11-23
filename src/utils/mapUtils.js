@@ -15,7 +15,6 @@ export function initializeMap(mapId) {
 }
 
 let markers = []; 
-let infoWindows = []; // 토클 배열
 
 export function addMarkers(map, apartments, onSelectApartment) {
   if (!Array.isArray(apartments)) {
@@ -54,11 +53,10 @@ export function addMarkers(map, apartments, onSelectApartment) {
     marker.setMap(map);
     bounds.extend(position);
 
-    // 마커 클릭 시 상세 정보를 부모에 전달
     kakao.maps.event.addListener(marker, "click", () => {
       console.log(`마커 클릭: ${aptNm}`);
       if (typeof onSelectApartment === "function") {
-        onSelectApartment(apartment); // 상세 정보를 업데이트하는 콜백 호출
+        onSelectApartment(apartment); 
       }
     });
 

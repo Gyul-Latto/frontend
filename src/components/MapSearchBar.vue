@@ -16,6 +16,8 @@ const gugunOptions = ref([]);
 const dongOptions = ref([]);
 const searchQuery = ref(""); // 아파트 검색어 초기화
 
+const selectedApartment = ref(null);
+
 // 시도 데이터 초기화
 onMounted(async () => {
   try {
@@ -120,6 +122,12 @@ watch(
     fetchSearchResults(newQuery);
   }
 );
+
+// 아파트 상세 페이지 이동
+const goToApartmentDetail = (apartmentId) => {
+  router.push({ path: `/apartment/${apartmentId}` });
+};
+
 </script>
 
 
@@ -170,7 +178,7 @@ watch(
           v-for="apartment in apartments"
           :key="apartment.aptSeq"
           class="apartment-card"
-          @click="goToApartmentDetail(apartment.aptSeq)"
+          @click="$emit('select-apartment', apartment)"
           style="cursor: pointer;"
         >
           <img :src="apartment.aptImg" alt="아파트 이미지" class="apartment-img" />

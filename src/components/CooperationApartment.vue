@@ -2,10 +2,8 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
-// 추천 아파트 데이터 상태
 const apartments = ref([]);
 
-// 데이터 로드 함수
 const loadRecommendations = async () => {
   try {
     const response = await axios.get('http://localhost:8080/api/recommend', {
@@ -18,14 +16,14 @@ const loadRecommendations = async () => {
       apartments.value = response.data.data.reverse().slice(0, 2);
       console.log(apartments.value);
     } else {
-      console.error('Failed to fetch recommendations:', response.data.message);
+      console.error(response.data.message);
     }
   } catch (error) {
-    console.error('Error fetching recommendations:', error);
+    console.error(error);
   }
 };
 
-// 컴포넌트가 마운트될 때 추천 데이터 로드
+// 추천 데이터 로드
 onMounted(loadRecommendations);
 </script>
 
@@ -52,19 +50,19 @@ onMounted(loadRecommendations);
 .other-houses-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 5rem; /* 간격을 적당히 유지 */
-  justify-content: space-between; /* 가로 정렬 */
+  gap: 5rem; 
+  justify-content: space-between;
 }
 
 .house-card {
-  flex: 1 1 calc(20% - 1rem); /* 컨테이너 너비를 줄임 */
+  flex: 1 1 calc(20% - 1rem); 
   background-color: var(--color-one);
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   text-align: center;
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  padding: 1.5rem; /* 컨테이너 높이 줄임 */
+  padding: 1.5rem;
 }
 
 .house-card:hover {
@@ -73,8 +71,8 @@ onMounted(loadRecommendations);
 }
 
 .house-image {
-  width: 100%; /* 사진 너비를 유지 */
-  height: 350px; /* 사진 높이를 줄임 */
+  width: 100%; 
+  height: 350px;
   object-fit: cover;
   margin: 0 auto 0.1rem auto;
   border-radius: 8px;

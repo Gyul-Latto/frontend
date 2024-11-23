@@ -43,13 +43,13 @@ const emit = defineEmits(["close"]);
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  overflow-y: auto; /* 스크롤 활성화 */
-  height: 100%; /* 부모 컨테이너 높이 채우기 */
+  overflow-y: auto; 
+  height: 100%; 
   box-sizing: border-box;
 }
 
 .close-btn {
-  background-color: #ff6b6b;
+  background-color: var(--color-four);
   color: white;
   border: none;
   padding: 5px 10px;
@@ -99,6 +99,6 @@ const emit = defineEmits(["close"]);
   content: "•";
   position: absolute;
   left: 0;
-  color: #007bff;
+  color: black;
 }
 </style>

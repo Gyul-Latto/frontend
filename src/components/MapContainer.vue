@@ -3,8 +3,8 @@ import { ref, watch, onMounted } from "vue";
 import { initializeMap, addMarkers } from "@/utils/mapUtils";
 
 const map = ref(null);
-const apartments = defineProps(["apartments"]); // 부모로부터 apartments를 prop으로 받음
-const emit = defineEmits(["select-apartment"]); // 부모로 선택된 아파트 전달
+const apartments = defineProps(["apartments"]); 
+const emit = defineEmits(["select-apartment"]); 
 
 // 지도 초기화
 onMounted(() => {
@@ -23,8 +23,6 @@ watch(apartments, (newApartments) => {
     console.error("지도 객체가 초기화되지 않았습니다.");
     return;
   }
-
-  // apartments가 객체 안에 배열 형태로 있는 경우 처리
   const apartmentArray = newApartments.apartments || [];
 
   if (!Array.isArray(apartmentArray)) {
