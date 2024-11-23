@@ -1,17 +1,28 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import { useAuthStore } from '@/stores/auth';
 
 const recommendations = ref([]);
+const authStore = useAuthStore();
 
 const fetchRecommendations = async () => {
+  
   try {
+    if (!authStore.token) {
+      console.error("사용자 토큰이 없습니다. 로그인이 필요합니다.");
+      return;
+    }
+
     const response = await axios.get('http://localhost:8080/api/recommend', {
+      headers: {
+        Authorization: `Bearer ${authStore.token}`, // JWT 토큰을 Authorization 헤더로 전달
+      },
       params: {
-        userId: 1, // 사용자 ID
         recommendationType: 'personalization', // 추천 타입
       },
     });
+
     if (response.data.statusCode === 200) {
       recommendations.value = response.data.data.reverse().slice(0, 4);
       console.log(recommendations.value);

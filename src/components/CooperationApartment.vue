@@ -1,17 +1,27 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import { useAuthStore } from '@/stores/auth';
 
 const apartments = ref([]);
+const authStore = useAuthStore();
 
 const loadRecommendations = async () => {
   try {
+    if (!authStore.token) {
+      console.error("사용자 토큰이 없습니다. 로그인이 필요합니다.");
+      return;
+    }
+
     const response = await axios.get('http://localhost:8080/api/recommend', {
+      headers: {
+        Authorization: `Bearer ${authStore.token}`, // JWT 토큰을 Authorization 헤더로 전달
+      },
       params: {
-        userId: 1, // 사용자 ID
-        recommendationType: 'cooperation' // 추천 타입
-      }
+        recommendationType: 'cooperation', // 추천 타입
+      },
     });
+
     if (response.data.statusCode === 200) {
       apartments.value = response.data.data.reverse().slice(0, 2);
       console.log(apartments.value);
@@ -19,13 +29,15 @@ const loadRecommendations = async () => {
       console.error(response.data.message);
     }
   } catch (error) {
-    console.error(error);
+    console.error("추천 데이터를 로드하는 중 오류 발생:", error);
   }
 };
 
 // 추천 데이터 로드
 onMounted(loadRecommendations);
 </script>
+
+
 
 <template>
   <section class="other-houses-section">
@@ -93,5 +105,4 @@ onMounted(loadRecommendations);
   font-size: 0.9rem;
   color: #666;
 }
-
 </style>

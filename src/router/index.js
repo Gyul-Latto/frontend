@@ -1,12 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '@/views/HomeView.vue';
-import RecommendedApartment from '@/views/RecommendedApartment.vue';
+import RecommendedApartment from '@/views/RecommendApartments.vue';
 import SimilarApartment from '@/views/SimilarApartment.vue';
 import PopularApartment from '@/views/PopularApartment.vue';
 import MapView from '@/views/MapView.vue';
 import NotFoundComponent from '@/views/NotFoundComponent.vue';
 import LoginView from '@/views/LoginView.vue';
-import SignUpView from '@/views/SignUpView.vue';
+import SignUpView from '@/views/CooperationApartments.vue';
 import { useAuthStore } from '@/stores/auth';
 
 const routes = [
