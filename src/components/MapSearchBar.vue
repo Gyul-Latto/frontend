@@ -201,5 +201,4 @@ const goToApartmentDetail = (apartmentId) => {
   </div>
 </template>
 
-<<<<<<< HEAD ======= >>>>>>> 6bff3353c5e364825db8c4b023abe2b4033628e6
 <style src="@/styles/MapSearchBar.css"></style>

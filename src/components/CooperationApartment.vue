@@ -32,8 +32,6 @@ const loadRecommendations = async () => {
     console.error("추천 데이터를 로드하는 중 오류 발생:", error);
   }
 };
-
-// 추천 데이터 로드
 onMounted(loadRecommendations);
 </script>
 
