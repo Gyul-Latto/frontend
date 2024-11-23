@@ -1,8 +1,58 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import axios from "axios";
+import {
+  Chart as ChartJS,
+  Title,
+  Tooltip,
+  Legend,
+  LineElement,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+} from "chart.js";
+import { Line } from "vue-chartjs";
 
-// Props와 Emit 설정
+// ChartJS 등록
+ChartJS.register(Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement);
+// 거래 데이터와 차트 데이터를 저장할 상태
+const chartData = ref({
+  labels: [], // X축 레이블
+  datasets: [
+    {
+      label: "거래량",
+      data: [],
+      borderColor: "#3B82F6", // 선 색상
+      backgroundColor: "rgba(59, 130, 246, 0.2)", // 배경 색상
+      tension: 0.4, // 곡선의 부드러움 정도
+    },
+  ],
+});
+const chartOptions = ref({
+  responsive: true, // 반응형 여부
+  plugins: {
+    legend: {
+      display: false, // 범례 비활성화
+    },
+    tooltip: {
+      callbacks: {
+        label: (context) => `${context.raw.toFixed(1)}억`, // 툴팁에 표시될 값 포맷
+      },
+    },
+  },
+  scales: {
+    x: {
+      grid: {
+        display: false, // X축 그리드 비활성화
+      },
+    },
+    y: {
+      ticks: {
+        callback: (value) => `${value}억`, // Y축 값 포맷
+      },
+    },
+  },
+});
 const props = defineProps(["apartment"]);
 const emit = defineEmits(["close"]);
 
@@ -46,9 +96,14 @@ const fetchDeals = async () => {
       params: { aptSeq: props.apartment.aptSeq },
     });
     deals.value = response.data;
-    console.log("Deals fetched:", deals.value);
+    chartData.value.labels = deals.value.map(
+      (deal) => `${deal.dealYear}.${String(deal.dealMonth).padStart(2, "0")}` // 년.월 포맷
+    );
+    chartData.value.datasets[0].data = deals.value.map((deal) =>
+      parseInt(deal.dealAmount.replace(/,/g, ""), 10) / 10000 // 억 단위로 변환 후 데이터 저장
+    );
   } catch (error) {
-    console.error("Failed to fetch apartment deals:", error);
+    console.error("거래 데이터를 가져오는 중 오류 발생:", error);
   }
 };
 
@@ -130,6 +185,11 @@ onMounted(() => {
     </div>
     <div v-else>
       <p>거래 정보가 없습니다.</p>
+    </div>
+    <!-- 거래 그래프 -->
+    <div class="chart-container" v-if="deals.length > 0">
+      <h3>거래량 그래프</h3>
+      <Line :data="chartData" :options="chartOptions" />
     </div>
   </div>
 </template>
