@@ -5,7 +5,7 @@ import axios from 'axios';
 import router from '@/router';
 
 const selectedDong = ref('');
-const selectedGender = ref('');
+const selectedGender = ref();
 
 const handleDongChanged = (code) => {
   selectedDong.value = code;
@@ -21,6 +21,10 @@ const name = ref('');
 const birthday = ref('');
 
 const handleSubmit = async () => {
+  if (password.value !== passwordCheck.value) {
+    alert('비밀번호가 다릅니다.');
+    return;
+  }
   try {
     const data = {
       email: email.value,
@@ -106,15 +110,15 @@ const handleSubmit = async () => {
             <div class="gender-boxes">
               <div
                 class="gender-box gender-box-left"
-                :class="{ selected: selectedGender === '남' }"
-                @click="selectGender('남')"
+                :class="{ selected: selectedGender === 0 }"
+                @click="selectGender(0)"
               >
                 남자
               </div>
               <div
                 class="gender-box gender-box-right"
-                :class="{ selected: selectedGender === '여' }"
-                @click="selectGender('여')"
+                :class="{ selected: selectedGender === 1 }"
+                @click="selectGender(1)"
               >
                 여자
               </div>
