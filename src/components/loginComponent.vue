@@ -3,6 +3,8 @@ import { ref } from 'vue';
 import uncheckedImage from '../assets/images/icons/uncheckedImage.png';
 import checkedImage from '../assets/images/icons/checkedImage.png';
 import axios from 'axios';
+import { useAuthStore } from '../stores/auth';
+import router from '@/router';
 
 const isChecked = ref(false);
 
@@ -12,6 +14,8 @@ function toggleCheckbox() {
 
 const email = ref('');
 const password = ref('');
+
+const store = useAuthStore();
 
 const handleSubmit = async () => {
   try {
@@ -25,9 +29,15 @@ const handleSubmit = async () => {
       },
     });
 
-    console.log('Login successful', response.data);
+    if (response.data.statusCode === 200) {
+      const token = response.data.data;
+      store.setToken(token);
+
+      router.replace('/');
+    }
   } catch (e) {
     console.error(e);
+    alert(e.response.data.message);
   }
 };
 </script>

@@ -1,6 +1,8 @@
 <script setup>
 import locationBarComponent from './locationBarComponent.vue';
 import { ref } from 'vue';
+import axios from 'axios';
+import router from '@/router';
 
 const selectedDong = ref('');
 const selectedGender = ref('');
@@ -18,14 +20,27 @@ const passwordCheck = ref('');
 const name = ref('');
 const birthday = ref('');
 
-const handleSubmit = () => {
-  console.log('Email:', email.value);
-  console.log('Password:', password.value);
-  console.log('Password Check:', passwordCheck.value);
-  console.log('Name:', name.value);
-  console.log('Birthday:', birthday.value);
-  console.log('Dong:', selectedDong.value);
-  console.log('Gender:', selectedGender.value);
+const handleSubmit = async () => {
+  try {
+    const data = {
+      email: email.value,
+      password: password.value,
+      username: name.value,
+      birthday: birthday.value,
+      dong: selectedDong.value,
+      gender: selectedGender.value,
+    };
+
+    const response = await axios.post('http://localhost:8080/api/members', data);
+    if (response.data.statusCode === 200) {
+      console.log('Navigating to /login');
+      router.replace({ name: 'login' });
+    }
+  } catch (e) {
+    alert('회원가입 실패');
+    console.error('Signup failed', e);
+  }
+  // 실패하면 else에서 안걸리고 catch에서 걸림
 };
 </script>
 
@@ -36,7 +51,7 @@ const handleSubmit = () => {
         <div class="logo"></div>
         <div class="brand">latto</div>
       </div>
-      <form @submit="handleSubmit">
+      <form @submit.prevent="handleSubmit">
         <div id="sign-up-box">
           <div class="input-box">
             <input
