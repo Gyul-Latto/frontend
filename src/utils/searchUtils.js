@@ -1,11 +1,11 @@
-import axios from "axios";
+import axios from 'axios';
 
 export const fetchSido = async () => {
   const url = `https://grpc-proxy-server-mkvo6j4wsq-du.a.run.app/v1/regcodes?regcode_pattern=*00000000&is_ignore_zero=true`;
   const response = await axios.get(url);
   return response.data.regcodes.map(({ code, name }) => ({
     code,
-    name: name.split(" ")[0],
+    name: name.split(' ')[0],
   }));
 };
 
@@ -14,12 +14,12 @@ export const fetchRegionData = async (regcode, type) => {
   const response = await axios.get(url);
   return response.data.regcodes.map(({ code, name }) => ({
     code,
-    name: type === "dong" ? name.split(" ")[2] || name.split(" ")[1] : name.split(" ")[1],
+    name: type === 'dong' ? name.split(' ')[2] || name.split(' ')[1] : name.split(' ')[1],
   }));
 };
 
 export const fetchApartments = async (sido, gugun, dong) => {
-  const response = await axios.post("http://localhost:8080/api/apt/search/sido", {
+  const response = await axios.post('http://localhost:8080/api/apt/search/sido', {
     sidoName: sido,
     gugunName: gugun,
     dongName: dong,
@@ -29,7 +29,7 @@ export const fetchApartments = async (sido, gugun, dong) => {
 
 export const fetchApartmentsBySearchQuery = async (aptName) => {
   const response = await axios.get(`http://localhost:8080/api/apt/search/name`, {
-    params: { aptName }, 
+    params: { aptName },
   });
   return response.data.data;
 };

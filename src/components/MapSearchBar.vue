@@ -1,4 +1,5 @@
 <script setup>
+
 import { ref, onMounted, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { fetchSido, fetchRegionData, fetchApartments, fetchApartmentsBySearchQuery } from "@/utils/searchUtils";
@@ -7,9 +8,9 @@ const emit = defineEmits(["search"]);
 const route = useRoute();
 const router = useRouter();
 
-const sido = ref("");
-const gugun = ref("");
-const dong = ref("");
+const sido = ref('');
+const gugun = ref('');
+const dong = ref('');
 const apartments = ref([]);
 const sidoOptions = ref([]);
 const gugunOptions = ref([]);
@@ -24,7 +25,7 @@ onMounted(async () => {
     const regions = await fetchSido();
     sidoOptions.value = regions;
   } catch (error) {
-    console.error("Failed to fetch sido data:", error);
+    console.error('Failed to fetch sido data:', error);
   }
 });
 
@@ -36,11 +37,11 @@ const handleSidoChange = async () => {
     return;
   }
   try {
-    const regcode = sido.value.substr(0, 2) + "*00000"; // 시도 코드
-    const regions = await fetchRegionData(regcode, "gugun");
+    const regcode = sido.value.substr(0, 2) + '*00000'; // 시도 코드
+    const regions = await fetchRegionData(regcode, 'gugun');
     gugunOptions.value = regions;
   } catch (error) {
-    console.error("Failed to fetch gugun data:", error);
+    console.error('Failed to fetch gugun data:', error);
   }
 };
 
@@ -51,20 +52,20 @@ const handleGugunChange = async () => {
     return;
   }
   try {
-    const regcode = gugun.value.substr(0, 5) + "*"; // 구군 코드
-    const regions = await fetchRegionData(regcode, "dong");
+    const regcode = gugun.value.substr(0, 5) + '*'; // 구군 코드
+    const regions = await fetchRegionData(regcode, 'dong');
     dongOptions.value = regions;
   } catch (error) {
-    console.error("Failed to fetch dong data:", error);
+    console.error('Failed to fetch dong data:', error);
   }
 };
 
 // 시군동 검색 실행
 const handleRegionSearch = async () => {
   try {
-    const sidoName = sidoOptions.value.find(option => option.code === sido.value)?.name || '';
-    const gugunName = gugunOptions.value.find(option => option.code === gugun.value)?.name || '';
-    const dongName = dongOptions.value.find(option => option.code === dong.value)?.name || '';
+    const sidoName = sidoOptions.value.find((option) => option.code === sido.value)?.name || '';
+    const gugunName = gugunOptions.value.find((option) => option.code === gugun.value)?.name || '';
+    const dongName = dongOptions.value.find((option) => option.code === dong.value)?.name || '';
 
     if (!sidoName && !gugunName && !dongName) {
       console.warn("지역 정보가 입력되지 않았습니다.");
@@ -72,10 +73,15 @@ const handleRegionSearch = async () => {
       return;
     }
 
+<<<<<<< HEAD
+    // 검색 결과를 부모로 전달
+    emit('search', apartments.value);
+=======
     apartments.value = await fetchApartments(sidoName, gugunName, dongName);
     emit("search", apartments.value); // 검색 결과 전달
+>>>>>>> 6bff3353c5e364825db8c4b023abe2b4033628e6
   } catch (error) {
-    console.error("Failed to fetch apartments data:", error);
+    console.error('Failed to fetch apartments data:', error);
   }
 };
 
@@ -127,9 +133,7 @@ watch(
 const goToApartmentDetail = (apartmentId) => {
   router.push({ path: `/apartment/${apartmentId}` });
 };
-
 </script>
-
 
 <template>
   <div class="search-bar">
@@ -179,7 +183,7 @@ const goToApartmentDetail = (apartmentId) => {
           :key="apartment.aptSeq"
           class="apartment-card"
           @click="$emit('select-apartment', apartment)"
-          style="cursor: pointer;"
+          style="cursor: pointer"
         >
           <img :src="apartment.aptImg" alt="아파트 이미지" class="apartment-img" />
           <div class="apartment-info">
@@ -198,5 +202,5 @@ const goToApartmentDetail = (apartmentId) => {
   </div>
 </template>
 
-
+<<<<<<< HEAD ======= >>>>>>> 6bff3353c5e364825db8c4b023abe2b4033628e6
 <style src="@/styles/MapSearchBar.css"></style>

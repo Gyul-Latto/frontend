@@ -1,4 +1,16 @@
-<script setup></script>
+<script setup>
+import { computed } from 'vue';
+import { useAuthStore } from '@/stores/auth';
+import router from '@/router';
+
+const store = useAuthStore();
+const hasLoggedIn = computed(() => store.token === null);
+
+const handleLogout = () => {
+  store.setToken(null);
+  router.replace('/');
+};
+</script>
 
 <template>
   <header class="header">
@@ -17,7 +29,14 @@
     </nav>
 
     <div class="header-right">
-      <a href="#" class="auth-button">로그인 <span class="divider">|</span> 회원가입</a>
+      <!-- <a href="#" class="auth-button">로그인 <span class="divider">|</span> 회원가입</a> -->
+      <!-- <div class="auth-button">
+        <router-link to="/login">로그인 <span class="divider">|</span> 회원가입</router-link>
+      </div> -->
+      <div class="auth-button" v-if="hasLoggedIn">
+        <router-link to="/login">로그인 <span class="divider">|</span> 회원가입</router-link>
+      </div>
+      <div class="auth-button" v-else @click="handleLogout" style="cursor: pointer">로그아웃</div>
     </div>
   </header>
 </template>

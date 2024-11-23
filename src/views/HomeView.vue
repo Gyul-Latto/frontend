@@ -1,10 +1,9 @@
 <script setup>
-import MainSearchBar from "@/components/MainSearchBar.vue";
-import Banner from "@/components/Banner.vue";
-import RecommendApartment from "@/components/RecommendApartment.vue"; 
-import CooperationApartment from "@/components/CooperationApartment.vue"; 
-import PopularApartment from "@/components/PopularApartment.vue";
-
+import MainSearchBar from '@/components/MainSearchBar.vue';
+import Banner from '@/components/Banner.vue';
+import RecommendApartment from '@/components/RecommendApartment.vue';
+import CooperationApartment from '@/components/CooperationApartment.vue';
+import PopularApartment from '@/components/PopularApartment.vue';
 </script>
 
 <template>

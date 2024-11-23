@@ -1,21 +1,21 @@
 <script setup>
-import { ref } from "vue";
-import MapSearchBar from "@/components/MapSearchBar.vue";
-import MapContainer from "@/components/MapContainer.vue";
-import DetailApartment from "@/components/DetailApartment.vue";
+import { ref } from 'vue';
+import MapSearchBar from '@/components/MapSearchBar.vue';
+import MapContainer from '@/components/MapContainer.vue';
+import DetailApartment from '@/components/DetailApartment.vue';
 
 const apartments = ref([]);
 const selectedApartment = ref(null);
 
 // 검색 결과를 업데이트
 const handleSearchResults = (results) => {
-  console.log("검색 결과:", results);
+  console.log('검색 결과:', results);
   apartments.value = results;
 };
 
 // 아파트 선택
 const handleSelectApartment = (apartment) => {
-  console.log("선택된 아파트:", apartment);
+  console.log('선택된 아파트:', apartment);
   selectedApartment.value = apartment;
 };
 
@@ -29,24 +29,15 @@ const handleCloseDetail = () => {
   <div class="map-view">
     <!-- 검색 바 -->
     <div class="search-bar-container">
-      <MapSearchBar
-        @search="handleSearchResults"
-        @select-apartment="handleSelectApartment"
-      />
+      <MapSearchBar @search="handleSearchResults" @select-apartment="handleSelectApartment" />
     </div>
     <!-- 상세보기 -->
     <div class="detail-container" v-if="selectedApartment">
-      <DetailApartment
-        :apartment="selectedApartment"
-        @close="handleCloseDetail"
-      />
+      <DetailApartment :apartment="selectedApartment" @close="handleCloseDetail" />
     </div>
     <!-- 지도 -->
     <div class="map-container">
-      <MapContainer
-        :apartments="apartments"
-        @select-apartment="handleSelectApartment"
-      />
+      <MapContainer :apartments="apartments" @select-apartment="handleSelectApartment" />
     </div>
   </div>
 </template>
