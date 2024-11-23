@@ -43,7 +43,8 @@ const handleCloseDetail = () => {
 </template>
 
 <style scoped>
-.search-bar-container {
+.search-bar-container
+{
   flex: 1;
   display: flex;
   justify-content: center;
@@ -51,6 +52,9 @@ const handleCloseDetail = () => {
   margin: 0 auto;
 }
 
+.detail-container{
+  
+}
 .map-view {
   display: flex;
   height: 100vh; /* 전체 화면 사용 */

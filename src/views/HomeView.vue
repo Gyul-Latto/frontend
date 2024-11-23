@@ -4,6 +4,7 @@ import Banner from '@/components/Banner.vue';
 import RecommendApartment from '@/components/RecommendApartment.vue';
 import CooperationApartment from '@/components/CooperationApartment.vue';
 import PopularApartment from '@/components/PopularApartment.vue';
+import { useAuthStore } from '@/stores/auth';
 </script>
 
 <template>
