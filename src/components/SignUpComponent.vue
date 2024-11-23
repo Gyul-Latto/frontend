@@ -31,9 +31,11 @@ const handleSubmit = async () => {
       password: password.value,
       username: name.value,
       birthday: birthday.value,
-      dong: selectedDong.value,
+      dongCode: selectedDong.value,
       gender: selectedGender.value,
     };
+
+    console.log('data', data);
 
     const response = await axios.post('http://localhost:8080/api/members', data);
     if (response.data.statusCode === 200) {
