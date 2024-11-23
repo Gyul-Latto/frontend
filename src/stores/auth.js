@@ -10,11 +10,7 @@ export const useAuthStore = defineStore(
       token.value = newToken;
     };
 
-    const logout = () => {
-      token.value = null;
-    };
-
-    return { token, setToken, logout };
+    return { token, setToken };
   },
   {
     persist: true,
