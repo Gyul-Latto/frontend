@@ -3,12 +3,9 @@ import { ref, watch, onMounted } from 'vue';
 import { initializeMap, addMarkers } from '@/utils/mapUtils';
 
 const map = ref(null);
-<<<<<<< HEAD
-const apartments = defineProps(['apartments']); // 부모로부터 apartments를 prop으로 받음
-=======
-const apartments = defineProps(["apartments"]);
-const emit = defineEmits(["select-apartment"]);
->>>>>>> 6bff3353c5e364825db8c4b023abe2b4033628e6
+
+const apartments = defineProps(['apartments']);
+const emit = defineEmits(['select-apartment']);
 
 // 지도 초기화
 onMounted(() => {
@@ -30,12 +27,12 @@ watch(apartments, (newApartments) => {
   const apartmentArray = newApartments.apartments || [];
 
   if (!Array.isArray(apartmentArray)) {
-    console.error("전달된 apartments.apartments가 배열이 아닙니다:", apartmentArray);
+    console.error('전달된 apartments.apartments가 배열이 아닙니다:', apartmentArray);
     return;
   }
 
   addMarkers(map.value, apartmentArray, (apartment) => {
-    emit("select-apartment", apartment);
+    emit('select-apartment', apartment);
   });
 });
 </script>

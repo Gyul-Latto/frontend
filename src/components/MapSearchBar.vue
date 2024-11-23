@@ -1,10 +1,14 @@
 <script setup>
-
 import { ref, onMounted, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { fetchSido, fetchRegionData, fetchApartments, fetchApartmentsBySearchQuery } from "@/utils/searchUtils";
+import {
+  fetchSido,
+  fetchRegionData,
+  fetchApartments,
+  fetchApartmentsBySearchQuery,
+} from '@/utils/searchUtils';
 
-const emit = defineEmits(["search"]);
+const emit = defineEmits(['search']);
 const route = useRoute();
 const router = useRouter();
 
@@ -15,7 +19,7 @@ const apartments = ref([]);
 const sidoOptions = ref([]);
 const gugunOptions = ref([]);
 const dongOptions = ref([]);
-const searchQuery = ref(""); // 아파트 검색어 초기화
+const searchQuery = ref(''); // 아파트 검색어 초기화
 
 const selectedApartment = ref(null);
 
@@ -68,18 +72,13 @@ const handleRegionSearch = async () => {
     const dongName = dongOptions.value.find((option) => option.code === dong.value)?.name || '';
 
     if (!sidoName && !gugunName && !dongName) {
-      console.warn("지역 정보가 입력되지 않았습니다.");
+      console.warn('지역 정보가 입력되지 않았습니다.');
       apartments.value = [];
       return;
     }
 
-<<<<<<< HEAD
-    // 검색 결과를 부모로 전달
-    emit('search', apartments.value);
-=======
     apartments.value = await fetchApartments(sidoName, gugunName, dongName);
-    emit("search", apartments.value); // 검색 결과 전달
->>>>>>> 6bff3353c5e364825db8c4b023abe2b4033628e6
+    emit('search', apartments.value); // 검색 결과 전달
   } catch (error) {
     console.error('Failed to fetch apartments data:', error);
   }
@@ -88,32 +87,32 @@ const handleRegionSearch = async () => {
 // 아파트 이름 검색 실행
 const handleNameSearch = async () => {
   if (!searchQuery.value.trim()) {
-    console.warn("검색어가 없습니다.");
+    console.warn('검색어가 없습니다.');
     apartments.value = [];
     return;
   }
 
   try {
     apartments.value = await fetchApartmentsBySearchQuery(searchQuery.value.trim());
-    emit("search", apartments.value); // 검색 결과 전달
+    emit('search', apartments.value); // 검색 결과 전달
   } catch (error) {
-    console.error("Failed to fetch apartments by name:", error);
+    console.error('Failed to fetch apartments by name:', error);
   }
 };
 
 // 쿼리 파라미터를 기반으로 아파트 검색 실행
 const fetchSearchResults = async (query) => {
   if (!query) {
-    console.warn("검색어가 없습니다.");
+    console.warn('검색어가 없습니다.');
     apartments.value = [];
     return;
   }
 
   try {
     apartments.value = await fetchApartmentsBySearchQuery(query);
-    console.log("검색 결과:", apartments.value);
+    console.log('검색 결과:', apartments.value);
   } catch (error) {
-    console.error("아파트 검색 중 오류 발생:", error);
+    console.error('아파트 검색 중 오류 발생:', error);
   }
 };
 
@@ -126,7 +125,7 @@ watch(
   () => route.query.q,
   (newQuery) => {
     fetchSearchResults(newQuery);
-  }
+  },
 );
 
 // 아파트 상세 페이지 이동
