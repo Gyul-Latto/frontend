@@ -2,12 +2,34 @@
 import { ref } from 'vue';
 import uncheckedImage from '../assets/images/icons/uncheckedImage.png';
 import checkedImage from '../assets/images/icons/checkedImage.png';
+import axios from 'axios';
 
 const isChecked = ref(false);
 
 function toggleCheckbox() {
   isChecked.value = !isChecked.value;
 }
+
+const email = ref('');
+const password = ref('');
+
+const handleSubmit = async () => {
+  try {
+    const formData = new FormData();
+    formData.append('username', email.value);
+    formData.append('password', password.value);
+
+    const response = await axios.post('http://localhost:8080/login', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    console.log('Login successful', response.data);
+  } catch (e) {
+    console.error(e);
+  }
+};
 </script>
 
 <template>
@@ -18,20 +40,20 @@ function toggleCheckbox() {
         <div class="brand">latto</div>
       </div>
       <div id="form-box">
-        <form>
+        <form @submit.prevent="handleSubmit">
           <div id="login-box">
             <div class="input-box">
-              <input id="id" placeholder="이메일" type="text" />
-              <input id="pw" placeholder="비밀번호" type="password" />
+              <input v-model="email" id="id" placeholder="이메일" type="text" />
+              <input v-model="password" id="pw" placeholder="비밀번호" type="password" />
             </div>
 
             <div class="checkbox-container">
               <img
                 @click="toggleCheckbox"
-                style="margin-right: 10px"
+                style="margin-right: 10px; cursor: pointer"
                 :src="isChecked ? checkedImage : uncheckedImage"
               />
-              <span @click="toggleCheckbox">로그인 상태 유지</span>
+              <span @click="toggleCheckbox" style="cursor: pointer">로그인 상태 유지</span>
             </div>
 
             <button id="login-btn" type="submit">로그인</button>
@@ -113,6 +135,7 @@ function toggleCheckbox() {
   border-radius: 10px;
   font-size: 20px;
   font-weight: 500;
+  cursor: pointer;
 }
 .divider {
   color: var(--color-four);

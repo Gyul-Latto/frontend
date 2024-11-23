@@ -36,7 +36,7 @@ const handleSubmit = () => {
         <div class="logo"></div>
         <div class="brand">latto</div>
       </div>
-      <form @submit.prevent="handleSubmit">
+      <form @submit="handleSubmit">
         <div id="sign-up-box">
           <div class="input-box">
             <input
