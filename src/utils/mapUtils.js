@@ -15,26 +15,27 @@ export function initializeMap(mapId) {
 }
 
 let markers = []; 
-let infoWindows = []; // 토클 배열
 
-export function addMarkers(map, apartments) {
-  console.log("addMarkers 호출:", { map, apartments });
+export function addMarkers(map, apartments, onSelectApartment) {
+  if (!Array.isArray(apartments)) {
+    console.error("addMarkers: apartments가 배열이 아닙니다.", apartments);
+    return;
+  }
 
-  
-  markers.forEach(({ marker, infoWindow }) => {
-    marker.setMap(null); 
-    infoWindow.close(); 
+  // 기존 마커와 정보창 초기화
+  markers.forEach(({ marker }) => {
+    marker.setMap(null);
   });
   markers = [];
-  infoWindows = []; 
 
   const bounds = new kakao.maps.LatLngBounds();
   const imgURL = "https://cdn-icons-png.flaticon.com/512/3771/3771140.png";
   const imgSize = new kakao.maps.Size(64, 69);
   const imageOption = { offset: new kakao.maps.Point(27, 69) };
 
-  
-  apartments.forEach(({ latitude, longitude, aptNm}) => {
+  apartments.forEach((apartment) => {
+    const { latitude, longitude, aptNm } = apartment;
+
     if (!latitude || !longitude) {
       console.warn(`유효하지 않은 위치 데이터: ${aptNm}`);
       return;
@@ -49,36 +50,23 @@ export function addMarkers(map, apartments) {
       title: aptNm,
     });
 
-    marker.setMap(map); 
-    bounds.extend(position); 
-
-    const infoWindow = new kakao.maps.InfoWindow({
-      content: `
-        <div style="padding:5px; width:200px; text-align:center; border-radius:3px;">
-          <strong>${aptNm}</strong><br>
-        </div>
-      `,
-    });
+    marker.setMap(map);
+    bounds.extend(position);
 
     kakao.maps.event.addListener(marker, "click", () => {
-      if (infoWindow.getMap()) {
-        console.log(`InfoWindow 닫기: ${aptNm}`);
-        infoWindow.close();
-      } else {
-        console.log(`InfoWindow 열기: ${aptNm}`);
-        infoWindows.forEach((win) => win.close()); 
-        infoWindow.open(map, marker); 
-      
+      console.log(`마커 클릭: ${aptNm}`);
+      if (typeof onSelectApartment === "function") {
+        onSelectApartment(apartment); 
       }
     });
-    markers.push({ marker, infoWindow });
-    infoWindows.push(infoWindow);
+
+    markers.push({ marker });
   });
 
   // 모든 마커가 보이도록 지도 이동
   if (markers.length > 0) {
     map.setBounds(bounds);
-    console.log(`${markers.length}개의 마커가 추가`);
+    console.log(`${markers.length}개의 마커가 추가되었습니다.`);
   } else {
     console.warn("표시할 유효한 마커가 없습니다.");
   }

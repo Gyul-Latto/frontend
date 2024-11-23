@@ -19,10 +19,17 @@ export const fetchRegionData = async (regcode, type) => {
 };
 
 export const fetchApartments = async (sido, gugun, dong) => {
-  const response = await axios.post("http://localhost:8080/api/apt/search", {
+  const response = await axios.post("http://localhost:8080/api/apt/search/sido", {
     sidoName: sido,
     gugunName: gugun,
     dongName: dong,
+  });
+  return response.data.data;
+};
+
+export const fetchApartmentsBySearchQuery = async (aptName) => {
+  const response = await axios.get(`http://localhost:8080/api/apt/search/name`, {
+    params: { aptName }, 
   });
   return response.data.data;
 };

@@ -3,7 +3,8 @@ import { ref, watch, onMounted } from "vue";
 import { initializeMap, addMarkers } from "@/utils/mapUtils";
 
 const map = ref(null);
-const apartments = defineProps(["apartments"]); // 부모로부터 apartments를 prop으로 받음
+const apartments = defineProps(["apartments"]); 
+const emit = defineEmits(["select-apartment"]); 
 
 // 지도 초기화
 onMounted(() => {
@@ -22,16 +23,17 @@ watch(apartments, (newApartments) => {
     console.error("지도 객체가 초기화되지 않았습니다.");
     return;
   }
+  const apartmentArray = newApartments.apartments || [];
 
-  if (!newApartments || !newApartments.apartments || newApartments.apartments.length === 0) {
-    console.warn("지도 업데이트를 위한 데이터가 없습니다.");
+  if (!Array.isArray(apartmentArray)) {
+    console.error("전달된 apartments.apartments가 배열이 아닙니다:", apartmentArray);
     return;
   }
 
-  console.log("addMarkers 호출 준비 완료: ", newApartments.apartments);
-  addMarkers(map.value, newApartments.apartments);
+  addMarkers(map.value, apartmentArray, (apartment) => {
+    emit("select-apartment", apartment);
+  });
 });
-
 
 </script>
 
@@ -44,5 +46,4 @@ watch(apartments, (newApartments) => {
   width: 100%;
   height: 100%;
 }
-
 </style>

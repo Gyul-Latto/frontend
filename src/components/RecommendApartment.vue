@@ -2,10 +2,8 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
-// 추천 아파트 데이터 상태
 const recommendations = ref([]);
 
-// 데이터 로드 함수
 const fetchRecommendations = async () => {
   try {
     const response = await axios.get('http://localhost:8080/api/recommend', {
@@ -25,7 +23,6 @@ const fetchRecommendations = async () => {
   }
 };
 
-// 컴포넌트 마운트 시 데이터 로드
 onMounted(fetchRecommendations);
 </script>
 
@@ -65,16 +62,16 @@ onMounted(fetchRecommendations);
   flex: 1 1 calc(25% - 1rem);
   max-width: calc(25% - 1rem);
   background-color: #ffffff;
-  border: 2px solid #ddd; /* 테두리 추가 */
+  border: 2px solid #ddd;
   border-radius: 10px;
   overflow: hidden;
-  transition: transform 0.3s, box-shadow 0.3s; /* 클릭 가능 효과 */
-  cursor: pointer; /* 클릭 가능 커서 */
+  transition: transform 0.3s, box-shadow 0.3s; 
+  cursor: pointer; 
 }
 
 .recommend-item:hover {
-  transform: translateY(-5px); /* 호버 시 상승 효과 */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 호버 시 그림자 */
+  transform: translateY(-5px); 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .recommend-item img {
@@ -86,7 +83,7 @@ onMounted(fetchRecommendations);
 
 .recommend-info {
   padding: 1rem;
-  text-align: center; /* 중앙 정렬 */
+  text-align: center; 
 }
 
 .apt-name {
@@ -98,8 +95,8 @@ onMounted(fetchRecommendations);
 
 .apt-details {
   font-size: 0.9rem;
-  color: #555; /* 내용 색상 */
-  margin-top: 1rem; /* 간격 추가 */
-  text-align: center; /* 내용 중앙 정렬 */
+  color: #555; 
+  margin-top: 1rem; 
+  text-align: center; 
 }
 </style>
