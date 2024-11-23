@@ -8,7 +8,8 @@ import NotFoundComponent from '@/views/NotFoundComponent.vue';
 
 const routes = [
   { path: '/', name: 'home', component: HomeView }, // 메인 페이지
-  { path: '/map', name: 'map', component: MapView },
+  { path: '/map', name: 'map', component: MapView,
+    props: (route) => ({ query: route.query.q }),},
   { path: '/recommended', name: 'recommended', component: RecommendedApartment },
   { path: '/similar', name: 'similar', component: SimilarApartment },
   { path: '/popular', name: 'popular', component: PopularApartment },

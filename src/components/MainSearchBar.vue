@@ -1,12 +1,45 @@
-<script setup></script>
+<script setup>
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { fetchApartmentsBySearchQuery } from "@/utils/searchUtils";
+
+const searchQuery = ref("");
+const apartments = ref([]);
+const router = useRouter();
+
+const handleSearch = async () => {
+  if (!searchQuery.value.trim()) {
+    console.warn("검색어를 입력하세요!");
+    return;
+  }
+
+  try {
+    apartments.value = await fetchApartmentsBySearchQuery(searchQuery.value);
+    console.log("검색 결과:", apartments.value);
+    router.push({ path: "/map", query: { q: searchQuery.value } }); // 검색어로 이동
+  } catch (error) {
+    console.error("검색 결과를 가져오는 중 오류:", error);
+  }
+};
+
+</script>
 
 <template>
   <div class="main-search-bar">
     <div class="location">
       <span>📍 용산구</span>
     </div>
-    <input class="search-input" type="text" placeholder="검색어를 입력해주세요" />
-    <button class="search-button">검색🔍</button>
+    <input
+      class="search-input"
+      type="text"
+      placeholder="아파트를 검색해주세요"
+      v-model="searchQuery"
+    />
+    <button 
+      class="search-button" 
+      @click="handleSearch" 
+      :disabled="!searchQuery.trim()">검색🔍
+    </button>
   </div>
 </template>
 
