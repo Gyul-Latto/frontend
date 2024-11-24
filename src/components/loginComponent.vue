@@ -4,7 +4,9 @@ import uncheckedImage from '../assets/images/icons/uncheckedImage.png';
 import checkedImage from '../assets/images/icons/checkedImage.png';
 import axios from 'axios';
 import { useAuthStore } from '../stores/auth';
+import { useUserStore } from '../stores/user';
 import router from '@/router';
+import VueJwtDecode from 'vue-jwt-decode';
 
 const isChecked = ref(false);
 
@@ -15,7 +17,25 @@ function toggleCheckbox() {
 const email = ref('');
 const password = ref('');
 
-const store = useAuthStore();
+const authStore = useAuthStore();
+const userStore = useUserStore();
+
+const fetchUserInfo = async (userId) => {
+  try {
+    const response = await axios.get('http://localhost:8080/api/members/' + userId, {
+      headers: {
+        Authorization: `Bearer ${authStore.token}`,
+      },
+    });
+
+    if (response.data.statusCode === 200) {
+      const userInfo = response.data.data;
+      userStore.setUserInfo(userInfo);
+    }
+  } catch (e) {
+    console.error(e);
+  }
+};
 
 const handleSubmit = async () => {
   try {
@@ -31,7 +51,11 @@ const handleSubmit = async () => {
 
     if (response.data.statusCode === 200) {
       const token = response.data.data;
-      store.setToken(token);
+      authStore.setToken(token);
+
+      const decoded = VueJwtDecode.decode(token);
+      const userId = decoded.userId;
+      await fetchUserInfo(userId);
 
       router.replace('/');
     }
