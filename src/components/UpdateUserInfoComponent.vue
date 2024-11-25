@@ -3,6 +3,7 @@ import locationBarComponent from './locationBarComponent.vue';
 import { onMounted, ref } from 'vue';
 import axios from 'axios';
 import router from '@/router';
+import { useRoute } from 'vue-router';
 
 import { fetchUserInfo } from '../utils/userUtils';
 
@@ -12,6 +13,7 @@ import { useUserStore } from '../stores/user';
 const userStore = useUserStore();
 const authStore = useAuthStore();
 const user = userStore.userInfo;
+const route = useRoute();
 
 const selectedDong = ref('');
 const selectedGender = ref();
@@ -24,6 +26,12 @@ const selectGender = (gender) => {
 };
 
 onMounted(() => {
+  const id = route.params.id;
+  if (id != user.userId) {
+    console.log(id, user.userId);
+    alert('잘못된 접근입니다.');
+    router.replace({ name: 'home' });
+  }
   selectGender(user.gender);
 });
 
@@ -122,8 +130,7 @@ const handleSubmit = async () => {
           </div>
 
           <div class="location-bar">
-            <locationBarComponent @dong-changed="handleDongChanged" />
-            <!-- <input type="hidden" :value="selectedDong" /> -->
+            <locationBarComponent @dong-changed="handleDongChanged" :code="user.dongCode" />
             <div class="gender-boxes">
               <div
                 class="gender-box gender-box-left"
