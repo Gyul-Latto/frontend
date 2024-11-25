@@ -1,16 +1,14 @@
 <script setup>
 import { computed } from 'vue';
 import { useAuthStore } from '@/stores/auth';
-import { useUserStore } from '@/stores/user';
+import { clearAuthData } from '@/utils/userUtils';
 import router from '@/router';
 
 const authStore = useAuthStore();
-const userStore = useUserStore();
 const hasLoggedIn = computed(() => authStore.token !== null);
 
 const handleLogout = () => {
-  authStore.setToken(null);
-  userStore.setUserInfo(null);
+  clearAuthData();
   router.replace('/');
 };
 </script>

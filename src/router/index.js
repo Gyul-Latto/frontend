@@ -9,6 +9,7 @@ import LoginView from '@/views/LoginView.vue';
 import SignUpView from '@/views/SignUpView.vue.vue';
 import UserInfoView from '@/views/UserInfoView.vue';
 import { useAuthStore } from '@/stores/auth';
+import UpdateUserInfoView from '@/views/UpdateUserInfoView.vue';
 
 const routes = [
   { path: '/', name: 'home', component: HomeView }, // 메인 페이지
@@ -39,6 +40,12 @@ const routes = [
     path: '/mypage',
     name: 'mypage',
     component: UserInfoView,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/mypage/:id',
+    name: 'mypage-detail',
+    component: UpdateUserInfoView,
     meta: { requiresAuth: true },
   },
   { path: '/login', name: 'login', component: LoginView },

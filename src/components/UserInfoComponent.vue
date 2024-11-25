@@ -2,13 +2,17 @@
 import router from '@/router';
 import { useAuthStore } from '../stores/auth';
 import { useUserStore } from '../stores/user';
+
+import { clearAuthData } from '../utils/userUtils';
+
 import axios from 'axios';
 const userStore = useUserStore();
 const authStore = useAuthStore();
 const user = userStore.userInfo;
 
 const updateBtn = () => {
-  console.log('update');
+  const userId = user.userId;
+  router.push({ name: 'mypage-detail', params: { id: userId } });
 };
 
 const deleteBtn = async () => {
@@ -16,14 +20,13 @@ const deleteBtn = async () => {
   if (flag) {
     try {
       const token = authStore.token;
-      const response = await axios.delete(`http://localhost:8080/api/members/${user.userId}`, {
+      await axios.delete(`http://localhost:8080/api/members/${user.userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      authStore.setToken(null);
-      userStore.setUserInfo(null);
-      router.replace({ name: 'home' });
+      clearAuthData();
+      router.replace('/');
     } catch (error) {
       console.error('Error deleting user:', error);
     }
