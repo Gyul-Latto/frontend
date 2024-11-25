@@ -5,6 +5,9 @@ import checkedImage from '../assets/images/icons/checkedImage.png';
 import axios from 'axios';
 import { useAuthStore } from '../stores/auth';
 import router from '@/router';
+import VueJwtDecode from 'vue-jwt-decode';
+
+import { fetchUserInfo } from '../utils/userUtils';
 
 const isChecked = ref(false);
 
@@ -15,7 +18,7 @@ function toggleCheckbox() {
 const email = ref('');
 const password = ref('');
 
-const store = useAuthStore();
+const authStore = useAuthStore();
 
 const handleSubmit = async () => {
   try {
@@ -31,7 +34,11 @@ const handleSubmit = async () => {
 
     if (response.data.statusCode === 200) {
       const token = response.data.data;
-      store.setToken(token);
+      authStore.setToken(token);
+
+      const decoded = VueJwtDecode.decode(token);
+      const userId = decoded.userId;
+      await fetchUserInfo(userId);
 
       router.replace('/');
     }

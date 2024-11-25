@@ -3,14 +3,11 @@ import { ref } from 'vue';
 import router from '@/router';
 import { useAuthStore } from '../stores/auth';
 import { useUserStore } from '../stores/user';
-
 import { clearAuthData } from '../utils/userUtils';
-
 import axios from 'axios';
 import { watch } from 'vue';
 const userStore = useUserStore();
 const authStore = useAuthStore();
-// const user = userStore.userInfo;
 
 const user = ref();
 
@@ -27,6 +24,7 @@ watch(
 
 const updateBtn = () => {
   const userId = user.value.userId;
+
   router.push({ name: 'mypage-detail', params: { id: userId } });
 };
 
