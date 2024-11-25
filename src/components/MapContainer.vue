@@ -1,9 +1,11 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue';
 import { initializeMap, addMarkers, moveToLocation } from '@/utils/mapUtils';
+import { useRoute } from 'vue-router'; // useRoute 추가
+import { fetchApartmentsBySearchQuery } from '@/utils/searchUtils';
 
 const map = ref(null);
-
+const route = useRoute();
 const apartments = defineProps(['apartments']);
 const emit = defineEmits(['select-apartment']);
 
@@ -14,6 +16,9 @@ onMounted(() => {
     console.error('지도 객체 초기화 실패');
   } else {
     console.log('지도 초기화 완료:', map.value);
+  }
+  if (route.query.q) {
+    searchApartments(route.query.q);
   }
 });
 
