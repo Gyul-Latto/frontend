@@ -57,21 +57,6 @@ const deleteBtn = async () => {
         <button id="update-btn" type="button" @click="updateBtn">정보수정</button>
         <button id="delete-btn" type="button" @click="deleteBtn">회원탈퇴</button>
       </div>
-      <span class="list-text">좋아요를 누른 아파트</span>
-      <div class="item-list">
-        <div class="popular-item">
-          <img src="@/assets/images/sampleApartment.jpeg" alt="아파트" />
-        </div>
-        <div class="popular-item">
-          <img src="@/assets/images/sampleApartment.jpeg" alt="아파트" />
-        </div>
-        <div class="popular-item">
-          <img src="@/assets/images/sampleApartment.jpeg" alt="아파트" />
-        </div>
-        <div class="popular-item">
-          <img src="@/assets/images/sampleApartment.jpeg" alt="아파트" />
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -124,27 +109,5 @@ const deleteBtn = async () => {
   font-weight: 500;
   cursor: pointer;
 }
-.list-text {
-  font-size: 20px;
-  margin: 60px 0 30px 0;
-}
-.popular-item {
-  flex: 1 1 calc(25% - 1rem);
-  max-width: calc(25% - 1rem);
-  background-color: #f0f0f0;
-  border-radius: 10px;
-  overflow: hidden;
-}
 
-.popular-item img {
-  width: 200px;
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
-  display: block;
-}
-.item-list {
-  display: flex;
-  gap: 1rem;
-  justify-content: space-between;
-}
 </style>

@@ -71,3 +71,12 @@ export function addMarkers(map, apartments, onSelectApartment) {
     console.warn('표시할 유효한 마커가 없습니다.');
   }
 }
+
+export function moveToLocation(map, latitude, longitude) {
+  if (!latitude || !longitude) {
+    console.error('moveToLocation: 유효하지 않은 위치 데이터', { latitude, longitude });
+    return;
+  }
+  const moveLatLng = new kakao.maps.LatLng(parseFloat(latitude), parseFloat(longitude));
+  map.panTo(moveLatLng);
+}

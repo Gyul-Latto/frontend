@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue';
-import { initializeMap, addMarkers } from '@/utils/mapUtils';
+import { initializeMap, addMarkers, moveToLocation } from '@/utils/mapUtils';
 
 const map = ref(null);
 
@@ -17,6 +17,7 @@ onMounted(() => {
   }
 });
 
+// 아파트 목록이 변경될 때 마커 갱신
 watch(apartments, (newApartments) => {
   console.log('watch 실행됨: ', newApartments);
 
@@ -33,8 +34,25 @@ watch(apartments, (newApartments) => {
 
   addMarkers(map.value, apartmentArray, (apartment) => {
     emit('select-apartment', apartment);
+    // 마커 클릭 시 지도 이동
+    moveToLocation(map.value, apartment.latitude, apartment.longitude);
   });
 });
+
+// 특정 아파트로 이동
+const moveToApartment = (apartment) => {
+  if (!map.value) {
+    console.error('지도 객체가 초기화되지 않았습니다.');
+    return;
+  }
+
+  if (!apartment || !apartment.latitude || !apartment.longitude) {
+    console.error('유효하지 않은 아파트 정보:', apartment);
+    return;
+  }
+
+  moveToLocation(map.value, apartment.latitude, apartment.longitude);
+};
 </script>
 
 <template>
