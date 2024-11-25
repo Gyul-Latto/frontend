@@ -2,6 +2,23 @@
 import { ref, onMounted, watch } from 'vue';
 import { fetchSido, fetchRegionData } from '@/utils/searchUtils';
 
+import { defineProps } from 'vue';
+
+const props = defineProps({
+  code: String,
+});
+
+onMounted(() => {
+  if (!props.code) return;
+  console.log('code:', props.code);
+
+  sido.value = props.code.substr(0, 2) + '00000000';
+  handleSidoChange();
+  gugun.value = props.code.substr(0, 5) + '00000';
+  handleGugunChange();
+  dong.value = props.code;
+});
+
 const emit = defineEmits(['search']);
 
 const sido = ref('');
