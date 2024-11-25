@@ -10,7 +10,8 @@ const props = defineProps(["apartment"]);
 const emit = defineEmits(["close"]);
 
 const userStore = useUserStore();
-const isLiked = ref(false);
+// 좋아요 상태를 아파트별로 관리
+const likeStatus = ref({});
 
 const checkLikeStatus = async () => {
   try {
@@ -18,7 +19,8 @@ const checkLikeStatus = async () => {
       params: { userId: userStore.userInfo?.userId, aptSeq: props.apartment.aptSeq },
       headers: { Authorization: `Bearer ${userStore.token}` },
     });
-    isLiked.value = response.data.data;
+    // 현재 아파트 ID에 따라 좋아요 상태를 저장
+    likeStatus.value[props.apartment.aptSeq] = response.data.data;
   } catch (error) {
     console.error("좋아요 상태 확인 중 오류:", error);
   }
@@ -28,18 +30,23 @@ const toggleLike = async () => {
   try {
     const url = `http://localhost:8080/api/apt/like`;
     const headers = { Authorization: `Bearer ${userStore.token}` };
-    if (isLiked.value) {
+
+    if (likeStatus.value[props.apartment.aptSeq]) {
+      // 좋아요 삭제
       await axios.delete(url, {
         params: { userId: userStore.userInfo?.userId, aptSeq: props.apartment.aptSeq },
         headers,
       });
     } else {
+      // 좋아요 추가
       await axios.post(url, null, {
         params: { userId: userStore.userInfo?.userId, aptSeq: props.apartment.aptSeq },
         headers,
       });
     }
-    isLiked.value = !isLiked.value;
+
+    // 상태 반전
+    likeStatus.value[props.apartment.aptSeq] = !likeStatus.value[props.apartment.aptSeq];
   } catch (error) {
     console.error("좋아요 상태 변경 중 오류:", error);
   }
@@ -52,7 +59,6 @@ onMounted(() => {
 });
 </script>
 
-
 <template>
   <div class="detail-apartment">
     <!-- 닫기 버튼 -->
@@ -62,7 +68,10 @@ onMounted(() => {
     <div class="image-container">
       <!-- 좋아요 버튼 -->
       <div class="like-button" @click="toggleLike">
-        <img :src="isLiked ? checkedImage : uncheckedImage" alt="좋아요 상태" />
+        <img
+          :src="likeStatus[apartment.aptSeq] ? checkedImage : uncheckedImage"
+          alt="좋아요 상태"
+        />
       </div>
       <img :src="props.apartment.aptImg" alt="아파트 이미지" class="apartment-image" />
     </div>
@@ -93,6 +102,7 @@ onMounted(() => {
     <ApartmentDeals :apartment="apartment" />
   </div>
 </template>
+
 
 <style scoped>
 /* 기존 스타일 그대로 유지 */
