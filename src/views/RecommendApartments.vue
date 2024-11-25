@@ -1,10 +1,12 @@
 <script setup>
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
-import { useAuthStore } from '@/stores/auth';
+import { ref, onMounted } from "vue";
+import axios from "axios";
+import { useAuthStore } from "@/stores/auth";
+import ToggleApartment from "@/components/ToggleApartment.vue";
 
 const recommendedApartments = ref([]);
 const authStore = useAuthStore();
+const selectedApartment = ref(null); 
 
 const loadRecommendedApartments = async () => {
   try {
@@ -15,7 +17,7 @@ const loadRecommendedApartments = async () => {
 
     const response = await axios.get('http://localhost:8080/api/recommend', {
       headers: {
-        Authorization: `Bearer ${authStore.token}`, 
+        Authorization: `Bearer ${authStore.token}`,
       },
       params: {
         recommendationType: 'personalization',
@@ -23,14 +25,18 @@ const loadRecommendedApartments = async () => {
     });
 
     if (response.data.statusCode === 200) {
-      recommendedApartments.value = response.data.data.reverse().slice(0, 10);
-      console.log(recommendedApartments.value);
+      recommendedApartments.value = response.data.data.reverse().slice(0, 5);
     } else {
-      console.error('Failed to load recommended apartments:', response.data.message);
+      console.error('클라이언트 오류:', response.data.message);
     }
   } catch (error) {
-    console.error('Error loading recommended apartments:', error);
+    console.error('백엔드 오류:', error);
   }
+};
+
+// 상세 페이지 닫기
+const closeDetail = () => {
+  selectedApartment.value = null;
 };
 
 onMounted(loadRecommendedApartments);
@@ -39,25 +45,35 @@ onMounted(loadRecommendedApartments);
 <template>
   <section class="recommended-apartments">
     <h1>추천 아파트</h1>
-    <div class="apartment-list" v-if="recommendedApartments.length > 0">
-      <div 
-        v-for="apartment in recommendedApartments" 
-        :key="apartment.aptSeq" 
+    <div class="apartment-list" v-if="!selectedApartment">
+      <div
+        v-for="(apartment, index) in recommendedApartments"
+        :key="apartment.aptSeq"
         class="apartment-item"
+        @click="selectedApartment = apartment"
       >
+        <div class="ranking">
+          <span>{{ index + 1 }}등</span>
+        </div>
         <img :src="apartment.aptImg" alt="아파트 이미지" class="apartment-image" />
         <div class="apartment-info">
           <h2>{{ apartment.aptNm }}</h2>
-          <p>주소: {{ apartment.roadNm }} {{ apartment.roadNmBonbun }}-{{ apartment.roadNmBubun }}</p>
-          <p>지번: {{ apartment.umdNm }} {{ apartment.jibun }}</p>
+          <p>주소: {{ apartment.roadNm }} {{ apartment.roadNmBonbun }}-{{ apartment.roadNmBubun }} ({{ apartment.umdNm }} {{ apartment.jibun }})</p>
           <p>면적: {{ apartment.excluUseAr }}㎡</p>
           <p>층수: {{ apartment.floor }}</p>
           <p>건축 연도: {{ apartment.buildYear }}</p>
-          <p>설명: {{ apartment.description }}</p>
+          <p>특징: {{ apartment.description }}</p>
         </div>
       </div>
     </div>
-    <p v-else>추천된 아파트가 없습니다.</p>
+    <p v-if="recommendedApartments.length === 0">추천된 아파트가 없습니다.</p>
+
+    <!-- 상세 페이지 -->
+    <ToggleApartment 
+      v-if="selectedApartment" 
+      :apartment="selectedApartment" 
+      @close="closeDetail" 
+    />
   </section>
 </template>
 
@@ -67,25 +83,38 @@ onMounted(loadRecommendedApartments);
 }
 
 .apartment-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4rem;
+  cursor: pointer;
 }
 
 .apartment-item {
-  flex: 1 1 calc(33.333% - 1rem);
-  max-width: calc(33.333% - 1rem);
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
 }
 
 .apartment-item:hover {
   transform: translateY(-5px);
   box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+.ranking {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: var(--color-two);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border-bottom-right-radius: 8px;
+  z-index: 1;
 }
 
 .apartment-image {

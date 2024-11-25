@@ -1,10 +1,14 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 import { useAuthStore } from '@/stores/auth';
+import { useUserStore } from '@/stores/user';
 
 const apartments = ref([]);
 const authStore = useAuthStore();
+const userStore = useUserStore();
+
+const username = computed(() => userStore.userInfo?.username || '사용자');
 
 const loadRecommendations = async () => {
   try {
@@ -15,10 +19,10 @@ const loadRecommendations = async () => {
 
     const response = await axios.get('http://localhost:8080/api/recommend', {
       headers: {
-        Authorization: `Bearer ${authStore.token}`, // JWT 토큰을 Authorization 헤더로 전달
+        Authorization: `Bearer ${authStore.token}`, 
       },
       params: {
-        recommendationType: 'cooperation', // 추천 타입
+        recommendationType: 'cooperation',
       },
     });
 
@@ -40,7 +44,7 @@ onMounted(loadRecommendations);
 <template>
   <section class="other-houses-section">
     <h3>이런 집은 어때요?</h3>
-    <p class="section-description">문인규님과 비슷한 성향을 가진 사람들이 선택한 집을 추천드립니다.</p>
+    <p class="section-description">{{ username }}님과 비슷한 성향을 가진 사람들이 선택한 집을 추천드립니다.</p>
     <div class="other-houses-list">
       <div 
         v-for="apartment in apartments" 
