@@ -1,11 +1,9 @@
 <script setup>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, computed } from 'vue';
 import { fetchApartmentsBySearchQuery } from "@/utils/searchUtils";
 
 const searchQuery = ref("");
 const apartments = ref([]);
-const router = useRouter();
 
 const handleSearch = async () => {
   if (!searchQuery.value.trim()) {
@@ -27,7 +25,7 @@ const handleSearch = async () => {
 <template>
   <div class="main-search-bar">
     <div class="location">
-      <span>📍 용산구</span>
+      <span>📍 대한민국</span>
     </div>
     <input
       class="search-input"

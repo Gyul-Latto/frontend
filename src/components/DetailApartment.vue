@@ -10,7 +10,7 @@ const props = defineProps(["apartment"]);
 const emit = defineEmits(["close"]);
 
 const userStore = useUserStore();
-// 좋아요 상태를 아파트별로 관리
+
 const likeStatus = ref({});
 
 const checkLikeStatus = async () => {
