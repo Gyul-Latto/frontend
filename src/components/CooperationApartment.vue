@@ -71,7 +71,7 @@ onMounted(loadRecommendations);
         </div>
       </div>
     </div>
-    <p v-if="authStore.token == null">추천된 아파트가 없습니다.</p>
+    <p v-if="apartments.length === 0">추천된 아파트가 없습니다.</p>
 
     <!-- 상세페이지 모달 -->
     <ToggleApartment

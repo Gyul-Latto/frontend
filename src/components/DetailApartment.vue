@@ -1,14 +1,14 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted } from 'vue';
 import { useAuthStore } from '@/stores/auth';
-import { useUserStore } from "@/stores/user";
-import uncheckedImage from "../assets/images/icons/unlike.png";
-import checkedImage from "../assets/images/icons/like.png";
-import ApartmentDeals from "./ApartmentDeals.vue";
-import axios from "axios";
+import { useUserStore } from '@/stores/user';
+import uncheckedImage from '../assets/images/icons/unlike.png';
+import checkedImage from '../assets/images/icons/like.png';
+import ApartmentDeals from './ApartmentDeals.vue';
+import axios from 'axios';
 
-const props = defineProps(["apartment"]);
-const emit = defineEmits(["close"]);
+const props = defineProps(['apartment']);
+const emit = defineEmits(['close']);
 
 const userStore = useUserStore();
 const authStore = useAuthStore();
@@ -24,7 +24,7 @@ const checkLikeStatus = async () => {
     // 현재 아파트 ID에 따라 좋아요 상태를 저장
     likeStatus.value[props.apartment.aptSeq] = response.data.data;
   } catch (error) {
-    console.error("좋아요 상태 확인 중 오류:", error);
+    console.error('좋아요 상태 확인 중 오류:', error);
   }
 };
 
@@ -50,7 +50,7 @@ const toggleLike = async () => {
     // 상태 반전
     likeStatus.value[props.apartment.aptSeq] = !likeStatus.value[props.apartment.aptSeq];
   } catch (error) {
-    console.error("좋아요 상태 변경 중 오류:", error);
+    console.error('좋아요 상태 변경 중 오류:', error);
   }
 };
 
@@ -93,10 +93,15 @@ onMounted(() => {
     <div class="additional-info">
       <h3>건물 정보</h3>
       <ul>
-        <li>면적: {{ apartment.excluUseAr }}m² </li>
-            <li> 총 층수: {{ apartment.floor }} </li>
-            <li>건축 연도: {{ apartment.buildYear }}</li>
-            <li>주소: {{ apartment.roadNm }} {{ apartment.roadNmBonbun }}-{{ apartment.roadNmBubun }} ({{ apartment.umdNm }} {{ apartment.jibun }})</li>
+        <li>면적: {{ apartment.excluUseAr }}m²</li>
+        <li>총 층수: {{ apartment.floor }}</li>
+        <li>건축 연도: {{ apartment.buildYear }}</li>
+        <li>
+          주소: {{ apartment.roadNm }} {{ apartment.roadNmBonbun }}-{{ apartment.roadNmBubun }} ({{
+            apartment.umdNm
+          }}
+          {{ apartment.jibun }})
+        </li>
       </ul>
     </div>
 
@@ -104,7 +109,6 @@ onMounted(() => {
     <ApartmentDeals :apartment="apartment" />
   </div>
 </template>
-
 
 <style scoped>
 /* 기존 스타일 그대로 유지 */
@@ -146,9 +150,9 @@ onMounted(() => {
   margin-bottom: 20px;
 }
 
-.apartment-details h3{
-    color: var(--color-four);
-  }
+.apartment-details h3 {
+  color: var(--color-four);
+}
 
 .apartment-details {
   margin-bottom: 50px;
@@ -166,7 +170,7 @@ onMounted(() => {
 }
 
 .additional-info li::before {
-  content: "•";
+  content: '•';
   position: absolute;
   left: 0;
   color: black;
@@ -184,5 +188,4 @@ onMounted(() => {
   width: 40px;
   height: 40px;
 }
-
 </style>
