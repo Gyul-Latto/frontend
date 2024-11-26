@@ -70,7 +70,7 @@ const handleCloseDetail = () => {
 }
 .map-view {
   display: flex;
-  height: 100vh;
+  height: 93vh;
 }
 
 .map-container {

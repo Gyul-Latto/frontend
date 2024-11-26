@@ -35,6 +35,7 @@ const routes = [
     path: '/popular',
     name: 'popular',
     component: PopularApartment,
+    meta: { requiresAuth: true },
   },
   {
     path: '/mypage',
