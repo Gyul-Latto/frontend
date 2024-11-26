@@ -49,7 +49,7 @@
 
 .name-search-row .search-input {
   flex: 3;
-  height: 40px;
+  height: 28px;
   padding: 0.5rem 1rem;
   border: 1px solid var(--color-boarder);
   border-radius: 8px;
