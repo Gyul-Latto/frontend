@@ -9,19 +9,19 @@ const recommendations = ref([]);
 const authStore = useAuthStore();
 const selectedApartment = ref(null);
 
-const today = getYesterdayDate(0);
+const today = ref(getYesterdayDate(0));
+
 const preHour = ref(parseInt(getPreviousHour(), 10));
 const currHour = ref(preHour.value + 1);
 
 const fetchRecommendations = async () => {
   try {
-    // if (!authStore.token) {
-    //   console.error('사용자 토큰이 없습니다. 로그인이 필요합니다.');
-    //   return;
-    // }
+    if (preHour.value === 23) {
+      today.value = getYesterdayDate(1);
+    }
 
     const response = await axios.get(
-      `http://localhost:8080/api/views/date/${today}/hour/${preHour.value}?limit=4`,
+      `http://localhost:8080/api/views/date/${today.value}/hour/${preHour.value}?limit=4`,
       {
         headers: {
           Authorization: `Bearer ${authStore.token}`,
