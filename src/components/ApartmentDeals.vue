@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
+import { useAuthStore } from '@/stores/auth';
 import axios from "axios";
 import {
   Chart as ChartJS,
@@ -14,7 +15,7 @@ import {
 import { Line } from "vue-chartjs";
 
 ChartJS.register(Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement);
-
+const authStore = useAuthStore();
 const props = defineProps(["apartment"]);
 
 const deals = ref([]);
@@ -24,7 +25,7 @@ const chartData = ref({
     {
       label: "거래량",
       data: [],
-      borderColor: "#3B82F6",
+      borderColor: "#ffc26f",
       backgroundColor: "rgba(59, 130, 246, 0.2)",
       tension: 0.4,
     },
@@ -68,15 +69,17 @@ const averagePerUnitPrice = computed(() => {
   const totalPricePerUnit = deals.value.reduce((sum, deal) => {
     const amount = parseInt(deal.dealAmount.replace(/,/g, ""), 10);
     const area = parseFloat(deal.dealExcluUseAr);
-    return sum + (area ? amount / area : 0);
+    return sum + (area ? (amount / area) * 3.3 : 0); 
   }, 0);
   return totalPricePerUnit / deals.value.length;
 });
-
 // 거래 데이터 로드
 const fetchDeals = async () => {
   try {
     const response = await axios.get(`http://localhost:8080/api/apt/search/deals`, {
+      headers: {
+        Authorization: `Bearer ${authStore.token}`, 
+      },
       params: { aptSeq: props.apartment.aptSeq },
     });
     deals.value = response.data;
@@ -101,14 +104,14 @@ onMounted(() => {
 <template>
   <div>
     <!-- 거래 평균 정보 -->
+    <h3 class="average-deal-title">거래정보</h3>
     <div class="average-deal-section" v-if="averageDealAmount && averagePerUnitPrice">
-      <h3>거래정보</h3>
       <div class="average-deal-info">
         <p>
           <strong>최근 실거래가 평균</strong>: {{ (averageDealAmount / 10000).toFixed(1) }}억 원
         </p>
         <p>
-          <strong>평당가</strong>: {{ Math.round(averagePerUnitPrice).toLocaleString() }}원
+          <strong>평당가</strong>: {{ Math.round(averagePerUnitPrice).toLocaleString() }}만원
         </p>
       </div>
     </div>
@@ -152,11 +155,13 @@ onMounted(() => {
 <style scoped>
 /* 기존 스타일 그대로 유지 */
 .average-deal-section {
-  margin-top: 20px;
-  padding: 10px;
+  padding: 20px ;
   background-color: #f9f9f9;
   border: 1px solid #ddd;
   border-radius: 8px;
+}
+.average-deal-title{
+  margin-top: 40px;
 }
 
 .average-deal-info {
@@ -170,7 +175,7 @@ onMounted(() => {
 }
 
 .deals-section {
-  margin-top: 20px;
+  margin-top: 50px;
 }
 
 .deals-section h3 {
@@ -207,6 +212,6 @@ onMounted(() => {
 }
 
 .chart-container {
-  margin-top: 20px;
+  margin-top: 40px;
 }
 </style>
