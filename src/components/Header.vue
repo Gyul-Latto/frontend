@@ -3,6 +3,7 @@ import { computed } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import { clearAuthData } from '@/utils/userUtils';
 import router from '@/router';
+import logImage from '@/assets/images/logo.png';
 
 const authStore = useAuthStore();
 const hasLoggedIn = computed(() => authStore.token !== null);
@@ -16,8 +17,10 @@ const handleLogout = () => {
 <template>
   <header class="header">
     <div class="header-left">
-      <div class="logo"></div>
-      <span class="brand"><router-link to="/">latto</router-link></span>
+      <div class="logo">
+        <img :src="logImage" alt="배너 이미지" />
+      </div>
+      <span class="brand"><router-link to="/">PickHome</router-link></span>
     </div>
 
     <nav class="header-nav">
