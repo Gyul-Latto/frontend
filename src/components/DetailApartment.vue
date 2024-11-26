@@ -31,7 +31,7 @@ const checkLikeStatus = async () => {
 const toggleLike = async () => {
   try {
     const url = `http://localhost:8080/api/apt/like`;
-    const headers = { Authorization: `Bearer ${userStore.token}` };
+    const headers = { Authorization: `Bearer ${authStore.token}` };
 
     if (likeStatus.value[props.apartment.aptSeq]) {
       // 좋아요 삭제

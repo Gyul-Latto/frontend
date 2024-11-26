@@ -3,6 +3,7 @@ import locationBarComponent from './locationBarComponent.vue';
 import { ref } from 'vue';
 import axios from 'axios';
 import router from '@/router';
+import logImage from '@/assets/images/logo.png';
 
 const selectedDong = ref('');
 const selectedGender = ref();
@@ -54,8 +55,10 @@ const handleSubmit = async () => {
   <div>
     <div class="sign-up-container">
       <div class="sign-up-header">
-        <div class="logo"></div>
-        <div class="brand">latto</div>
+        <div class="logo">
+        <img :src="logImage" alt="배너 이미지" />
+      </div>
+        <div class="brand">PickHome</div>
       </div>
       <form @submit.prevent="handleSubmit">
         <div id="sign-up-box">

@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useAuthStore } from '../stores/auth';
 import router from '@/router';
 import VueJwtDecode from 'vue-jwt-decode';
+import logImage from '@/assets/images/logo.png';
 
 import { fetchUserInfo } from '../utils/userUtils';
 
@@ -53,8 +54,10 @@ const handleSubmit = async () => {
   <div>
     <div class="login-container">
       <div class="login-header">
-        <div class="logo"></div>
-        <div class="brand">latto</div>
+        <div class="logo">
+        <img :src="logImage" alt="배너 이미지" />
+      </div>
+        <div class="brand">PickHome</div>
       </div>
       <div id="form-box">
         <form @submit.prevent="handleSubmit">
