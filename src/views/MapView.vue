@@ -4,6 +4,8 @@ import MapSearchBar from '@/components/MapSearchBar.vue';
 import MapContainer from '@/components/MapContainer.vue';
 import DetailApartment from '@/components/DetailApartment.vue';
 
+import { increaseViewCount } from '@/utils/searchUtils';
+
 const apartments = ref([]);
 const selectedApartment = ref(null);
 const mapRef = ref(null); // 지도 컴포넌트 참조
@@ -25,6 +27,7 @@ const handleSearchResults = (results) => {
 const handleSelectApartment = (apartment) => {
   console.log('선택된 아파트:', apartment);
   selectedApartment.value = apartment;
+  increaseViewCount(apartment.aptSeq);
 };
 
 // 상세보기 닫기
@@ -45,14 +48,17 @@ const handleCloseDetail = () => {
     </div>
     <!-- 지도 -->
     <div class="map-container">
-      <MapContainer ref="mapRef" :apartments="apartments" @select-apartment="handleSelectApartment" />
+      <MapContainer
+        ref="mapRef"
+        :apartments="apartments"
+        @select-apartment="handleSelectApartment"
+      />
     </div>
   </div>
 </template>
 
 <style scoped>
-.search-bar-container
-{
+.search-bar-container {
   flex: 1;
   display: flex;
   justify-content: center;
@@ -60,12 +66,11 @@ const handleCloseDetail = () => {
   margin: 0 auto;
 }
 
-.detail-container{
-  
+.detail-container {
 }
 .map-view {
   display: flex;
-  height: 100vh; 
+  height: 100vh;
 }
 
 .map-container {

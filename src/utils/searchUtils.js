@@ -33,3 +33,12 @@ export const fetchApartmentsBySearchQuery = async (aptName) => {
   });
   return response.data.data;
 };
+
+// 아파트 상세 정보 조회 async, await 사용
+export const increaseViewCount = (aptSeq) => {
+  try {
+    axios.get(`http://localhost:8080/api/views/${aptSeq}`);
+  } catch (e) {
+    console.log(e);
+  }
+};
