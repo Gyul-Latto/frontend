@@ -1,27 +1,16 @@
 <script setup>
-import { ref, onMounted, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import {
-  fetchSido,
-  fetchRegionData,
-  fetchApartments,
-  fetchApartmentsBySearchQuery,
-} from '@/utils/searchUtils';
+import { ref, onMounted } from 'vue';
+import { fetchSido, fetchRegionData, fetchApartments, fetchApartmentsBySearchQuery } from '@/utils/searchUtils';
 
 const emit = defineEmits(['search']);
-const route = useRoute();
-const router = useRouter();
-
 const sido = ref('');
 const gugun = ref('');
 const dong = ref('');
-const apartments = ref([]);
+const apartments = ref([]); // 검색 결과 리스트
 const sidoOptions = ref([]);
 const gugunOptions = ref([]);
 const dongOptions = ref([]);
-const searchQuery = ref(''); // 아파트 검색어 초기화
-
-const selectedApartment = ref(null);
+// const searchQuery = ref(''); // 검색어
 
 // 시도 데이터 초기화
 onMounted(async () => {
@@ -77,61 +66,35 @@ const handleRegionSearch = async () => {
       return;
     }
 
-    apartments.value = await fetchApartments(sidoName, gugunName, dongName);
-    emit('search', apartments.value); // 검색 결과 전달
+    // 검색 결과 가져오기
+    const results = await fetchApartments(sidoName, gugunName, dongName);
+
+    // apartments 상태 업데이트
+    apartments.value = results;
+
+    // 부모 컴포넌트에 전달
+    emit('search', results);
   } catch (error) {
     console.error('Failed to fetch apartments data:', error);
   }
 };
 
+
 // 아파트 이름 검색 실행
-const handleNameSearch = async () => {
-  if (!searchQuery.value.trim()) {
-    console.warn('검색어가 없습니다.');
-    apartments.value = [];
-    return;
-  }
+// const handleNameSearch = async () => {
+//   if (!searchQuery.value.trim()) {
+//     console.warn('검색어가 없습니다.');
+//     apartments.value = [];
+//     return;
+//   }
 
-  try {
-    apartments.value = await fetchApartmentsBySearchQuery(searchQuery.value.trim());
-    emit('search', apartments.value); // 검색 결과 전달
-  } catch (error) {
-    console.error('Failed to fetch apartments by name:', error);
-  }
-};
-
-// 쿼리 파라미터를 기반으로 아파트 검색 실행
-const fetchSearchResults = async (query) => {
-  if (!query) {
-    console.warn('검색어가 없습니다.');
-    apartments.value = [];
-    return;
-  }
-
-  try {
-    apartments.value = await fetchApartmentsBySearchQuery(query);
-    console.log('검색 결과:', apartments.value);
-  } catch (error) {
-    console.error('아파트 검색 중 오류 발생:', error);
-  }
-};
-
-// 라우트 변경 시 또는 페이지 로드 시 검색 결과 로드
-onMounted(() => {
-  fetchSearchResults(route.query.q);
-});
-
-watch(
-  () => route.query.q,
-  (newQuery) => {
-    fetchSearchResults(newQuery);
-  },
-);
-
-// 아파트 상세 페이지 이동
-const goToApartmentDetail = (apartmentId) => {
-  router.push({ path: `/apartment/${apartmentId}` });
-};
+//   try {
+//     apartments.value = await fetchApartmentsBySearchQuery(searchQuery.value.trim()); // 검색 결과 업데이트
+//     emit('search', apartments.value); // 부모 컴포넌트에 전달
+//   } catch (error) {
+//     console.error('Failed to fetch apartments by name:', error);
+//   }
+// };
 </script>
 
 <template>
@@ -163,7 +126,7 @@ const goToApartmentDetail = (apartmentId) => {
     </div>
 
     <!-- 아파트 이름 검색 -->
-    <div class="name-search-row">
+    <!-- <div class="name-search-row">
       <input
         class="search-input"
         type="text"
@@ -171,7 +134,7 @@ const goToApartmentDetail = (apartmentId) => {
         v-model="searchQuery"
       />
       <button @click="handleNameSearch">검색</button>
-    </div>
+    </div> -->
 
     <!-- 검색 결과 -->
     <div class="search-results" v-if="apartments.length > 0">

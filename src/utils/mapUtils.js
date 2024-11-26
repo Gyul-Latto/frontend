@@ -35,12 +35,12 @@ export function addMarkers(map, apartments, onSelectApartment) {
 
   apartments.forEach((apartment) => {
     const { latitude, longitude, aptNm } = apartment;
-
+    
     if (!latitude || !longitude) {
       console.warn(`유효하지 않은 위치 데이터: ${aptNm}`);
       return;
     }
-
+    
     const position = new kakao.maps.LatLng(parseFloat(latitude), parseFloat(longitude));
     const markerImage = new kakao.maps.MarkerImage(imgURL, imgSize, imageOption);
 

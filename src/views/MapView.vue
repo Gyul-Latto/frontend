@@ -6,11 +6,19 @@ import DetailApartment from '@/components/DetailApartment.vue';
 
 const apartments = ref([]);
 const selectedApartment = ref(null);
+const mapRef = ref(null); // 지도 컴포넌트 참조
 
 // 검색 결과를 업데이트
 const handleSearchResults = (results) => {
   console.log('검색 결과:', results);
+
+  // 리스트와 마커를 동시에 업데이트
   apartments.value = results;
+
+  // 지도 컴포넌트에 데이터 전달
+  if (mapRef.value) {
+    mapRef.value.updateMarkers(results); // 커스텀 함수 호출
+  }
 };
 
 // 아파트 선택
@@ -37,7 +45,7 @@ const handleCloseDetail = () => {
     </div>
     <!-- 지도 -->
     <div class="map-container">
-      <MapContainer :apartments="apartments" @select-apartment="handleSelectApartment" />
+      <MapContainer ref="mapRef" :apartments="apartments" @select-apartment="handleSelectApartment" />
     </div>
   </div>
 </template>
@@ -57,7 +65,7 @@ const handleCloseDetail = () => {
 }
 .map-view {
   display: flex;
-  height: 100vh; /* 전체 화면 사용 */
+  height: 100vh; 
 }
 
 .map-container {
