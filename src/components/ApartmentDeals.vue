@@ -1,7 +1,7 @@
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watch } from 'vue';
 import { useAuthStore } from '@/stores/auth';
-import axios from "axios";
+import axios from 'axios';
 import {
   Chart as ChartJS,
   Title,
@@ -11,22 +11,23 @@ import {
   CategoryScale,
   LinearScale,
   PointElement,
-} from "chart.js";
-import { Line } from "vue-chartjs";
+} from 'chart.js';
+import { Line } from 'vue-chartjs';
 
 ChartJS.register(Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement);
+
 const authStore = useAuthStore();
-const props = defineProps(["apartment"]);
+const props = defineProps(['apartment']);
 
 const deals = ref([]);
 const chartData = ref({
   labels: [],
   datasets: [
     {
-      label: "거래량",
+      label: '거래량',
       data: [],
-      borderColor: "#ffc26f",
-      backgroundColor: "rgba(59, 130, 246, 0.2)",
+      borderColor: '#ffc26f',
+      backgroundColor: 'rgba(59, 130, 246, 0.2)',
       tension: 0.4,
     },
   ],
@@ -53,44 +54,47 @@ const chartOptions = ref({
 
 // 거래 금액 포맷 함수
 const formatDealAmount = (amount) => {
-  const valueInWon = parseInt(amount.replace(/,/g, ""), 10);
+  const valueInWon = parseInt(amount.replace(/,/g, ''), 10);
   return `${(valueInWon / 10000).toFixed(1)}억`;
 };
 
 // 평균 실거래가 및 평당가 계산
 const averageDealAmount = computed(() => {
   if (!deals.value.length) return null;
-  const totalAmount = deals.value.reduce((sum, deal) => sum + parseInt(deal.dealAmount.replace(/,/g, ""), 10), 0);
+  const totalAmount = deals.value.reduce((sum, deal) => sum + parseInt(deal.dealAmount.replace(/,/g, ''), 10), 0);
   return totalAmount / deals.value.length;
 });
 
 const averagePerUnitPrice = computed(() => {
   if (!deals.value.length) return null;
   const totalPricePerUnit = deals.value.reduce((sum, deal) => {
-    const amount = parseInt(deal.dealAmount.replace(/,/g, ""), 10);
+    const amount = parseInt(deal.dealAmount.replace(/,/g, ''), 10);
     const area = parseFloat(deal.dealExcluUseAr);
-    return sum + (area ? (amount / area) * 3.3 : 0); 
+    return sum + (area ? (amount / area) * 3.3 : 0);
   }, 0);
   return totalPricePerUnit / deals.value.length;
 });
+
 // 거래 데이터 로드
 const fetchDeals = async () => {
   try {
-    const response = await axios.get(`http://localhost:8080/api/apt/search/deals`, {
+    if (!props.apartment || !props.apartment.aptSeq) return;
+    const response = await axios.get('http://localhost:8080/api/apt/search/deals', {
       headers: {
-        Authorization: `Bearer ${authStore.token}`, 
+        Authorization: `Bearer ${authStore.token}`,
       },
       params: { aptSeq: props.apartment.aptSeq },
     });
     deals.value = response.data;
     chartData.value.labels = deals.value.map(
-      (deal) => `${deal.dealYear}.${String(deal.dealMonth).padStart(2, "0")}`
+      (deal) => `${deal.dealYear}.${String(deal.dealMonth).padStart(2, '0')}`
     );
     chartData.value.datasets[0].data = deals.value.map((deal) =>
-      parseInt(deal.dealAmount.replace(/,/g, ""), 10) / 10000
+      parseInt(deal.dealAmount.replace(/,/g, ''), 10) / 10000
     );
   } catch (error) {
-    console.error("거래 데이터를 가져오는 중 오류 발생:", error);
+    console.error('거래 데이터를 가져오는 중 오류 발생:', error);
+    deals.value = []; // 오류 시 초기화
   }
 };
 
@@ -99,6 +103,16 @@ onMounted(() => {
     fetchDeals();
   }
 });
+
+watch(
+  () => props.apartment.aptSeq,
+  (newAptSeq) => {
+    if (newAptSeq) {
+      fetchDeals();
+    }
+  }
+);
+
 </script>
 
 <template>
