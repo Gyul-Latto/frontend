@@ -1,8 +1,11 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import { fetchSido, fetchRegionData, fetchApartments, fetchApartmentsBySearchQuery } from '@/utils/searchUtils';
 
+const route = useRoute();
 const emit = defineEmits(['search']);
+
 const sido = ref('');
 const gugun = ref('');
 const dong = ref('');
@@ -83,24 +86,45 @@ const handleRegionSearch = async () => {
 // 아파트 이름 검색 실행
 const handleNameSearch = async () => {
   try {
-    if (!searchQuery.value.trim()) {
+    const searchTerm = searchQuery.value.trim(); // 검색어를 직접 참조
+    if (!searchTerm) {
       console.warn('검색어가 없습니다.');
       apartments.value = [];
       return;
     }
 
     // 아파트 이름으로 검색 결과 가져오기
-    const results = await fetchApartmentsBySearchQuery(searchQuery.value.trim());
+    const results = await fetchApartmentsBySearchQuery(searchTerm);
 
     // apartments 상태 업데이트
     apartments.value = results;
-
-    // 부모 컴포넌트에 전달
     emit('search', results);
   } catch (error) {
     console.error('Failed to fetch apartments by name:', error);
+    apartments.value = [];
   }
 };
+
+// 라우트가 변경될 때마다 검색 실행
+onMounted(() => {
+  const query = typeof route.query.q === 'string' ? route.query.q : ''; 
+  if (query) {
+    searchQuery.value = query;
+    handleNameSearch(query);
+  }
+});
+
+watch(
+  () => route.query.q,
+  (newQuery) => {
+    const query = typeof newQuery === 'string' ? newQuery : '';
+    if (query) {
+      searchQuery.value = query;
+      handleNameSearch(query);
+    }
+  }
+);
+
 </script>
 
 <template>
@@ -138,7 +162,7 @@ const handleNameSearch = async () => {
           placeholder="아파트 이름 검색"
           v-model="searchQuery"
         />
-        <button @click="handleNameSearch">검색</button>
+        <button class="search-button" @click="handleNameSearch">검색🔍</button>
       </div>
 
 

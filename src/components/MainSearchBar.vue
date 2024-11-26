@@ -1,6 +1,18 @@
 <script setup>
 import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
 
+const searchQuery = ref('');
+const router = useRouter();
+
+// 검색 버튼 클릭 시 /map 경로로 이동
+const handleSearch = () => {
+  if (searchQuery.value.trim()) {
+    router.push({ path: '/map', query: { q: searchQuery.value.trim() } });
+  } else {
+    alert('검색어를 입력해주세요.');
+  }
+};
 
 </script>
 
@@ -15,7 +27,7 @@ import { ref, computed } from 'vue';
       placeholder="아파트를 검색해주세요"
       v-model="searchQuery"
     />
-    <button class="search-button">검색🔍</button>
+    <button class="search-button" @click="handleSearch">검색🔍</button>
   </div>
 </template>
 
