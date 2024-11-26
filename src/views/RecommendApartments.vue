@@ -25,7 +25,7 @@ const loadRecommendedApartments = async () => {
     });
 
     if (response.data.statusCode === 200) {
-      recommendedApartments.value = response.data.data.reverse().slice(0, 5);
+      recommendedApartments.value = response.data.data.reverse().slice(0, 6);
     } else {
       console.error('클라이언트 오류:', response.data.message);
     }

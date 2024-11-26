@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted } from "vue";
+import { useAuthStore } from '@/stores/auth';
 import { useUserStore } from "@/stores/user";
 import uncheckedImage from "../assets/images/icons/unlike.png";
 import checkedImage from "../assets/images/icons/like.png";
@@ -10,14 +11,15 @@ const props = defineProps(["apartment"]);
 const emit = defineEmits(["close"]);
 
 const userStore = useUserStore();
+const authStore = useAuthStore();
 
 const likeStatus = ref({});
 
 const checkLikeStatus = async () => {
   try {
     const response = await axios.get(`http://localhost:8080/api/apt/like`, {
+      headers: { Authorization: `Bearer ${authStore.token}` },
       params: { userId: userStore.userInfo?.userId, aptSeq: props.apartment.aptSeq },
-      headers: { Authorization: `Bearer ${userStore.token}` },
     });
     // 현재 아파트 ID에 따라 좋아요 상태를 저장
     likeStatus.value[props.apartment.aptSeq] = response.data.data;
@@ -79,22 +81,22 @@ onMounted(() => {
     <!-- 주요 정보 -->
     <div class="apartment-main-info">
       <h2>{{ apartment.aptNm }}</h2>
-      <p class="location">주소: {{ apartment.roadNm }} {{ apartment.roadNmBonbun }}-{{ apartment.roadNmBubun }}</p>
       <p>면적: {{ apartment.excluUseAr }}m² | 층수: {{ apartment.floor }}</p>
     </div>
 
     <!-- 상세 설명 -->
     <div class="apartment-details">
-      <h3>상세 설명</h3>
-      <p>{{ apartment.description }}</p>
+      <h3>{{ apartment.description }}</h3>
     </div>
 
     <!-- 추가 정보 -->
     <div class="additional-info">
       <h3>건물 정보</h3>
       <ul>
-        <li>건축 연도: {{ apartment.buildYear }}</li>
-        <li>지번: {{ apartment.umdNm }} {{ apartment.jibun }}</li>
+        <li>면적: {{ apartment.excluUseAr }}m² </li>
+            <li> 총 층수: {{ apartment.floor }} </li>
+            <li>건축 연도: {{ apartment.buildYear }}</li>
+            <li>주소: {{ apartment.roadNm }} {{ apartment.roadNmBonbun }}-{{ apartment.roadNmBubun }} ({{ apartment.umdNm }} {{ apartment.jibun }})</li>
       </ul>
     </div>
 
@@ -144,13 +146,12 @@ onMounted(() => {
   margin-bottom: 20px;
 }
 
-.location {
-  font-size: 1.2rem;
-  color: #666;
-}
+.apartment-details h3{
+    color: var(--color-four);
+  }
 
 .apartment-details {
-  margin-bottom: 20px;
+  margin-bottom: 50px;
 }
 
 .additional-info ul {
