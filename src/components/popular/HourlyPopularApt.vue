@@ -9,15 +9,20 @@ const recommendedApartments = ref([]);
 const authStore = useAuthStore();
 const selectedApartment = ref(null);
 
-const today = getYesterdayDate(0);
+const today = ref(getYesterdayDate(0));
 
 const preHour = ref(parseInt(getPreviousHour(), 10));
 const currHour = ref(preHour.value + 1);
 
 const loadRecommendedApartments = async () => {
   try {
+    // hour가 23일 경우 date를 하루 전으로 변경
+    if (preHour.value === 23) {
+      today.value = getYesterdayDate(1);
+    }
+
     const response = await axios.get(
-      `http://localhost:8080/api/views/date/${today}/hour/${preHour.value}`,
+      `http://localhost:8080/api/views/date/${today.value}/hour/${preHour.value}`,
       {
         headers: {
           Authorization: `Bearer ${authStore.token}`,
