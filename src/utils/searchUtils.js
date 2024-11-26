@@ -23,16 +23,16 @@ export const fetchApartments = async (sido, gugun, dong) => {
   const authStore = useAuthStore();
   const response = await axios.post(
     'http://localhost:8080/api/apt/search/sido',
-    { 
+    {
       sidoName: sido,
       gugunName: gugun,
       dongName: dong,
     },
-    { 
+    {
       headers: {
-        Authorization: `Bearer ${authStore.token}`, 
+        Authorization: `Bearer ${authStore.token}`,
       },
-    }
+    },
   );
   return response.data.data;
 };
@@ -41,7 +41,7 @@ export const fetchApartmentsBySearchQuery = async (aptName) => {
   const authStore = useAuthStore();
   const response = await axios.get(`http://localhost:8080/api/apt/search/name`, {
     headers: {
-        Authorization: `Bearer ${authStore.token}`, 
+      Authorization: `Bearer ${authStore.token}`,
     },
     params: { aptName },
   });
@@ -52,7 +52,7 @@ export const fetchApartmentsBySearchQuery = async (aptName) => {
 export const increaseViewCount = async (aptSeq) => {
   const authStore = useAuthStore();
   try {
-    await axios.get(`http://localhost:8080/api/views/${aptSeq}`, {
+    await axios.get(`http://localhost:8080/api/views/apt/${aptSeq}`, {
       headers: {
         Authorization: `Bearer ${authStore.token}`,
       },
