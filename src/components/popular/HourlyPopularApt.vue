@@ -3,29 +3,31 @@ import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useAuthStore } from '@/stores/auth';
 import ToggleApartment from '@/components/ToggleApartment.vue';
+import { getPreviousHour, getYesterdayDate } from '@/utils/dateUtils';
 
 const recommendedApartments = ref([]);
 const authStore = useAuthStore();
 const selectedApartment = ref(null);
 
+const today = getYesterdayDate(0);
+
+const preHour = ref(parseInt(getPreviousHour(), 10));
+const currHour = ref(preHour.value + 1);
+
 const loadRecommendedApartments = async () => {
   try {
-    if (!authStore.token) {
-      console.error('사용자 토큰이 없습니다. 로그인이 필요합니다.');
-      return;
-    }
-
-    const response = await axios.get('http://localhost:8080/api/recommend', {
-      headers: {
-        Authorization: `Bearer ${authStore.token}`,
+    const response = await axios.get(
+      `http://localhost:8080/api/views/date/${today}/hour/${preHour.value}`,
+      {
+        headers: {
+          Authorization: `Bearer ${authStore.token}`,
+        },
       },
-      params: {
-        recommendationType: 'personalization',
-      },
-    });
+    );
 
     if (response.data.statusCode === 200) {
       recommendedApartments.value = response.data.data.reverse().slice(0, 6);
+      console.log(recommendedApartments.value);
     } else {
       console.error('클라이언트 오류:', response.data.message);
     }
@@ -40,12 +42,19 @@ const closeDetail = () => {
 };
 
 onMounted(loadRecommendedApartments);
+
+onMounted(() => {
+  console.log('preHour:', preHour.value);
+});
 </script>
 
 <template>
-  <section class="recommended-apartments">
-    <h1>추천 아파트</h1>
-    <div class="apartment-list" v-if="!selectedApartment">
+  <section class="cooperation-apartments">
+    <h2>실시간 인기 아파트</h2>
+    <p>
+      최근 1시간 <b>({{ preHour }}시 ~ {{ currHour }}시)</b>을 기준으로 집계된 인기 아파트 입니다.
+    </p>
+    <div class="apartment-list" v-if="recommendedApartments.length > 0">
       <div
         v-for="(apartment, index) in recommendedApartments"
         :key="apartment.aptSeq"
@@ -71,15 +80,14 @@ onMounted(loadRecommendedApartments);
         </div>
       </div>
     </div>
-    <p v-if="recommendedApartments.length === 0">추천된 아파트가 없습니다.</p>
-
+    <p v-if="recommendedApartments.length === 0">실시간 인기 아파트가 없습니다.</p>
     <!-- 상세 페이지 -->
     <ToggleApartment v-if="selectedApartment" :apartment="selectedApartment" @close="closeDetail" />
   </section>
 </template>
 
 <style scoped>
-.recommended-apartments {
+.cooperation-apartments {
   padding: 2rem;
 }
 
@@ -87,7 +95,6 @@ onMounted(loadRecommendedApartments);
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 4rem;
-  cursor: pointer;
 }
 
 .apartment-item {
