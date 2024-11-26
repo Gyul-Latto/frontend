@@ -10,7 +10,7 @@ const apartments = ref([]); // 검색 결과 리스트
 const sidoOptions = ref([]);
 const gugunOptions = ref([]);
 const dongOptions = ref([]);
-// const searchQuery = ref(''); // 검색어
+const searchQuery = ref(''); // 검색어
 
 // 시도 데이터 초기화
 onMounted(async () => {
@@ -81,20 +81,26 @@ const handleRegionSearch = async () => {
 
 
 // 아파트 이름 검색 실행
-// const handleNameSearch = async () => {
-//   if (!searchQuery.value.trim()) {
-//     console.warn('검색어가 없습니다.');
-//     apartments.value = [];
-//     return;
-//   }
+const handleNameSearch = async () => {
+  try {
+    if (!searchQuery.value.trim()) {
+      console.warn('검색어가 없습니다.');
+      apartments.value = [];
+      return;
+    }
 
-//   try {
-//     apartments.value = await fetchApartmentsBySearchQuery(searchQuery.value.trim()); // 검색 결과 업데이트
-//     emit('search', apartments.value); // 부모 컴포넌트에 전달
-//   } catch (error) {
-//     console.error('Failed to fetch apartments by name:', error);
-//   }
-// };
+    // 아파트 이름으로 검색 결과 가져오기
+    const results = await fetchApartmentsBySearchQuery(searchQuery.value.trim());
+
+    // apartments 상태 업데이트
+    apartments.value = results;
+
+    // 부모 컴포넌트에 전달
+    emit('search', results);
+  } catch (error) {
+    console.error('Failed to fetch apartments by name:', error);
+  }
+};
 </script>
 
 <template>
@@ -124,17 +130,17 @@ const handleRegionSearch = async () => {
 
       <button @click="handleRegionSearch" :disabled="!dong">검색</button>
     </div>
+      <!-- 아파트 이름 검색 -->
+      <div class="name-search-row">
+        <input
+          class="search-input"
+          type="text"
+          placeholder="아파트 이름 검색"
+          v-model="searchQuery"
+        />
+        <button @click="handleNameSearch">검색</button>
+      </div>
 
-    <!-- 아파트 이름 검색 -->
-    <!-- <div class="name-search-row">
-      <input
-        class="search-input"
-        type="text"
-        placeholder="아파트 이름 검색"
-        v-model="searchQuery"
-      />
-      <button @click="handleNameSearch">검색</button>
-    </div> -->
 
     <!-- 검색 결과 -->
     <div class="search-results" v-if="apartments.length > 0">

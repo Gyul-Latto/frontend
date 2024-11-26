@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { initializeMap, addMarkers, moveToLocation } from '@/utils/mapUtils';
-
+const emit = defineEmits(['select-apartment']);
 const map = ref(null);
 
 // 지도 초기화
@@ -26,6 +26,7 @@ const updateMarkers = async (newApartments) => {
   // 마커 추가
   addMarkers(map.value, newApartments, (apartment) => {
     // 마커 클릭 시 지도 이동
+    emit('select-apartment', apartment);
     moveToLocation(map.value, apartment.latitude, apartment.longitude);
   });
 };
